@@ -62,7 +62,7 @@ export default function Navbar() {
           </div>
 
           <span className="text-lg font-bold text-slate-900 dark:text-white">
-            Frank<span className="text-emerald-500">Dev</span>
+            Frank <span className="text-emerald-500">Kamgang</span>
           </span>
         </NavLink>
 
@@ -160,3 +160,4 @@ export default function Navbar() {
     </>
   );
 }
+

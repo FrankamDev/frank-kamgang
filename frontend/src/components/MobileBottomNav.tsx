@@ -9,11 +9,11 @@ import {
 } from "react-icons/fa";
 
 const navigation = [
-  {
-    label: "Accueil",
-    path: "/",
-    icon: FaHome,
-  },
+  // {
+  //   label: "Accueil",
+  //   path: "/",
+  //   icon: FaHome,
+  // },
   {
     label: "À propos",
     path: "/about",

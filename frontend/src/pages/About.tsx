@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+
 import {
   FiCode,
   FiDatabase,
@@ -6,9 +7,12 @@ import {
   FiTrendingUp,
   FiArrowRight,
 } from "react-icons/fi";
+
 import { Link } from "react-router-dom";
+
 import Navbar from "../components/Navbar";
 import MobileBottomNav from "../components/MobileBottomNav";
+import AboutHero from "../components/AboutHero";
 
 const skills = [
   {
@@ -56,17 +60,33 @@ export default function About() {
   return (
     <main
       className="
-        min-h-screen overflow-hidden
-        bg-white text-slate-900
-        transition-colors duration-300
-        dark:bg-[#080d17] dark:text-white
+        min-h-screen
+        overflow-hidden
+        bg-white
+        text-slate-900
+        transition-colors
+        duration-300
+        dark:bg-[#080d17]
+        dark:text-white
       "
     >
-      {/* Background */}
-      <div className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
+      {/* =====================================================
+          BACKGROUND
+      ===================================================== */}
+
+      <div
+        className="
+          pointer-events-none
+          fixed
+          inset-0
+          -z-0
+          overflow-hidden
+        "
+      >
         <div
           className="
-            absolute inset-0
+            absolute
+            inset-0
             bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.04),transparent_35%)]
             dark:bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.08),transparent_35%)]
           "
@@ -74,144 +94,47 @@ export default function About() {
 
         <div
           className="
-            absolute inset-0 opacity-[0.15] dark:opacity-[0.3]
+            absolute
+            inset-0
+            opacity-[0.15]
+            dark:opacity-[0.3]
             [background-image:radial-gradient(rgba(100,116,139,0.2)_1px,transparent_1px)]
             [background-size:24px_24px]
           "
         />
       </div>
 
-      {/* Navbar */}
+      {/* =====================================================
+          NAVBAR
+      ===================================================== */}
+
       <Navbar />
 
-      <div className="mx-auto max-w-7xl px-4 pb-28 pt-28 sm:px-6 sm:pb-20 sm:pt-36 lg:px-8">
+      {/* =====================================================
+          CONTENU
+      ===================================================== */}
 
+      <div
+        className="
+          mx-auto
+          max-w-7xl
+          px-4
+          pb-28
+          pt-28
+          sm:px-6
+          sm:pb-20
+          sm:pt-36
+          lg:px-8
+        "
+      >
         {/* =====================================================
-            INTRO
+            ABOUT HERO
         ===================================================== */}
 
-        <motion.section
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="mx-auto max-w-5xl"
-        >
-          <div
-            className="
-              mb-5 inline-flex items-center gap-2
-              rounded-full
-              border border-emerald-400/30
-              bg-emerald-50
-              px-3 py-1.5
-              text-[10px] font-bold uppercase tracking-[0.16em]
-              text-emerald-600
-              dark:bg-emerald-400/[0.04]
-              dark:text-emerald-400
-              sm:px-4 sm:py-2 sm:text-xs
-            "
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-
-            À propos
-          </div>
-
-          <h1
-            className="
-              max-w-4xl
-              text-[2.7rem] font-black
-              leading-[0.98]
-              tracking-[-0.055em]
-              sm:text-5xl
-              md:text-6xl
-              lg:text-7xl
-          "
-          >
-            Je transforme mes idées en{" "}
-            <span className="text-emerald-500 dark:text-emerald-400">
-              projets concrets.
-            </span>
-          </h1>
-
-          <div className="mt-5 max-w-2xl sm:mt-7">
-            <p
-              className="
-                text-xs leading-6
-                text-slate-600
-                dark:text-slate-400
-                sm:text-base sm:leading-7
-              "
-            >
-              Je suis Frank Kamgang, développeur web et créateur digital.
-              J'aime construire des applications utiles, expérimenter de
-              nouvelles technologies et transformer des idées en produits
-              numériques.
-            </p>
-
-            <p
-              className="
-                mt-3 text-xs leading-6
-                text-slate-600
-                dark:text-slate-400
-                sm:mt-4 sm:text-base sm:leading-7
-              "
-            >
-              Mon objectif est de progresser constamment, créer des solutions
-              réellement utiles et développer des projets capables de générer
-              de la valeur.
-            </p>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:gap-3">
-            <Link
-              to="/projects"
-              className="
-                group inline-flex items-center justify-center gap-2
-                rounded-lg
-                bg-emerald-500
-                px-5 py-3
-                text-xs font-bold text-slate-950
-                transition
-                hover:-translate-y-0.5
-                hover:bg-emerald-400
-                sm:text-sm
-              "
-            >
-              Voir mes projets
-
-              <FiArrowRight
-                className="
-                  text-sm
-                  transition-transform duration-300
-                  group-hover:translate-x-1
-                "
-              />
-            </Link>
-
-            <Link
-              to="/contact"
-              className="
-                inline-flex items-center justify-center
-                rounded-lg
-                border border-slate-200
-                bg-white
-                px-5 py-3
-                text-xs font-bold
-                text-slate-700
-                transition
-                hover:border-emerald-400/40
-                dark:border-slate-800
-                dark:bg-[#101827]
-                dark:text-slate-200
-                sm:text-sm
-              "
-            >
-              Me contacter
-            </Link>
-          </div>
-        </motion.section>
+        <AboutHero />
 
         {/* =====================================================
-            SKILLS
+            DOMAINES
         ===================================================== */}
 
         <section className="mt-16 sm:mt-24">
@@ -222,7 +145,16 @@ export default function About() {
             description="Un profil polyvalent qui combine développement, design et compréhension des enjeux business."
           />
 
-          <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-2 sm:gap-4">
+          <div
+            className="
+              mt-8
+              grid
+              gap-3
+              sm:mt-10
+              sm:grid-cols-2
+              sm:gap-4
+            "
+          >
             {skills.map((skill, index) => {
               const Icon = skill.icon;
 
@@ -249,13 +181,17 @@ export default function About() {
                     y: -4,
                   }}
                   className="
-                    group relative overflow-hidden
+                    group
+                    relative
+                    overflow-hidden
                     rounded-xl
-                    border border-slate-200
+                    border
+                    border-slate-200
                     bg-white
                     p-5
                     shadow-sm
-                    transition-all duration-300
+                    transition-all
+                    duration-300
                     hover:border-emerald-400/40
                     dark:border-slate-800
                     dark:bg-[#101827]
@@ -266,9 +202,14 @@ export default function About() {
                   <div className="flex items-center justify-between">
                     <div
                       className="
-                        flex h-10 w-10 items-center justify-center
+                        flex
+                        h-10
+                        w-10
+                        items-center
+                        justify-center
                         rounded-lg
-                        border border-slate-200
+                        border
+                        border-slate-200
                         bg-slate-50
                         text-emerald-500
                         dark:border-slate-700
@@ -281,7 +222,8 @@ export default function About() {
 
                     <span
                       className="
-                        text-3xl font-black
+                        text-3xl
+                        font-black
                         text-slate-100
                         dark:text-slate-800
                       "
@@ -290,16 +232,27 @@ export default function About() {
                     </span>
                   </div>
 
-                  <h3 className="mt-6 text-lg font-bold tracking-tight sm:text-xl">
+                  <h3
+                    className="
+                      mt-6
+                      text-lg
+                      font-bold
+                      tracking-tight
+                      sm:text-xl
+                    "
+                  >
                     {skill.title}
                   </h3>
 
                   <p
                     className="
-                      mt-2.5 text-xs leading-6
+                      mt-2.5
+                      text-xs
+                      leading-6
                       text-slate-600
                       dark:text-slate-400
-                      sm:text-sm sm:leading-7
+                      sm:text-sm
+                      sm:leading-7
                     "
                   >
                     {skill.description}
@@ -308,10 +261,14 @@ export default function About() {
                   {/* Ligne animée */}
                   <span
                     className="
-                      absolute bottom-0 left-0
-                      h-px w-0
+                      absolute
+                      bottom-0
+                      left-0
+                      h-px
+                      w-0
                       bg-emerald-400
-                      transition-all duration-500
+                      transition-all
+                      duration-500
                       group-hover:w-full
                     "
                   />
@@ -322,14 +279,24 @@ export default function About() {
         </section>
 
         {/* =====================================================
-            STACK
+            STACK TECHNIQUE
         ===================================================== */}
 
         <motion.section
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: 0.6,
+          }}
           className="mt-16 sm:mt-24"
         >
           <SectionHeader
@@ -341,8 +308,13 @@ export default function About() {
 
           <div
             className="
-              mt-7 grid grid-cols-2 gap-2.5
-              sm:mt-9 sm:grid-cols-3 sm:gap-3
+              mt-7
+              grid
+              grid-cols-2
+              gap-2.5
+              sm:mt-9
+              sm:grid-cols-3
+              sm:gap-3
               md:grid-cols-4
             "
           >
@@ -368,20 +340,24 @@ export default function About() {
                 }}
                 className="
                   rounded-xl
-                  border border-slate-200
+                  border
+                  border-slate-200
                   bg-white
-                  px-3 py-3.5
+                  px-3
+                  py-3.5
                   text-center
                   transition
                   hover:border-emerald-400/40
                   dark:border-slate-800
                   dark:bg-[#101827]
-                  sm:px-4 sm:py-4
+                  sm:px-4
+                  sm:py-4
                 "
               >
                 <span
                   className="
-                    text-xs font-semibold
+                    text-xs
+                    font-semibold
                     text-slate-700
                     dark:text-slate-200
                     sm:text-sm
@@ -395,21 +371,33 @@ export default function About() {
         </motion.section>
 
         {/* =====================================================
-            PHILOSOPHY
+            VISION
         ===================================================== */}
 
         <motion.section
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
           className="mt-16 sm:mt-24"
         >
           <div
             className="
-              relative overflow-hidden
+              relative
+              overflow-hidden
               rounded-xl
-              border border-emerald-400/20
+              border
+              border-emerald-400/20
               bg-emerald-50
               p-6
               dark:bg-gradient-to-br
@@ -421,8 +409,11 @@ export default function About() {
           >
             <div
               className="
-                absolute -right-20 -top-20
-                h-48 w-48
+                absolute
+                -right-20
+                -top-20
+                h-48
+                w-48
                 rounded-full
                 bg-emerald-400/[0.08]
                 blur-3xl
@@ -432,7 +423,10 @@ export default function About() {
             <div className="relative max-w-3xl">
               <span
                 className="
-                  text-[10px] font-bold uppercase tracking-[0.18em]
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.18em]
                   text-emerald-600
                   dark:text-emerald-400
                   sm:text-xs
@@ -444,7 +438,9 @@ export default function About() {
               <h2
                 className="
                   mt-3
-                  text-2xl font-black tracking-tight
+                  text-2xl
+                  font-black
+                  tracking-tight
                   sm:text-3xl
                   lg:text-4xl
                 "
@@ -458,10 +454,13 @@ export default function About() {
 
               <p
                 className="
-                  mt-3 text-xs leading-6
+                  mt-3
+                  text-xs
+                  leading-6
                   text-slate-600
                   dark:text-slate-400
-                  sm:text-sm sm:leading-7
+                  sm:text-sm
+                  sm:leading-7
                 "
               >
                 Je considère chaque projet comme une occasion d'apprendre
@@ -473,8 +472,13 @@ export default function About() {
               <Link
                 to="/expertise"
                 className="
-                  group mt-5 inline-flex items-center gap-2
-                  text-xs font-bold
+                  group
+                  mt-5
+                  inline-flex
+                  items-center
+                  gap-2
+                  text-xs
+                  font-bold
                   text-emerald-600
                   dark:text-emerald-400
                   sm:text-sm
@@ -484,7 +488,8 @@ export default function About() {
 
                 <FiArrowRight
                   className="
-                    transition-transform duration-300
+                    transition-transform
+                    duration-300
                     group-hover:translate-x-1
                   "
                 />
@@ -498,16 +503,29 @@ export default function About() {
         ===================================================== */}
 
         <motion.section
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
           className="mt-16 pb-4 sm:mt-24"
         >
           <div className="text-center">
             <p
               className="
-                text-[10px] font-bold uppercase tracking-[0.18em]
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-[0.18em]
                 text-emerald-600
                 dark:text-emerald-400
                 sm:text-xs
@@ -518,7 +536,10 @@ export default function About() {
 
             <h2
               className="
-                mt-3 text-2xl font-black tracking-tight
+                mt-3
+                text-2xl
+                font-black
+                tracking-tight
                 sm:text-4xl
               "
             >
@@ -531,26 +552,45 @@ export default function About() {
 
             <p
               className="
-                mx-auto mt-3 max-w-xl
-                text-xs leading-6
+                mx-auto
+                mt-3
+                max-w-xl
+                text-xs
+                leading-6
                 text-slate-600
                 dark:text-slate-400
-                sm:text-sm sm:leading-7
+                sm:text-sm
+                sm:leading-7
               "
             >
               Découvrez mes projets ou contactez-moi pour discuter de votre
               prochaine idée.
             </p>
 
-            <div className="mt-5 flex flex-col justify-center gap-2.5 sm:flex-row">
+            <div
+              className="
+                mt-5
+                flex
+                flex-col
+                justify-center
+                gap-2.5
+                sm:flex-row
+              "
+            >
               <Link
                 to="/projects"
                 className="
-                  inline-flex items-center justify-center gap-2
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
                   rounded-lg
                   bg-emerald-500
-                  px-5 py-3
-                  text-xs font-bold text-slate-950
+                  px-5
+                  py-3
+                  text-xs
+                  font-bold
+                  text-slate-950
                   transition
                   hover:-translate-y-0.5
                   hover:bg-emerald-400
@@ -558,18 +598,24 @@ export default function About() {
                 "
               >
                 Explorer mes projets
+
                 <FiArrowRight />
               </Link>
 
               <Link
                 to="/contact"
                 className="
-                  inline-flex items-center justify-center
+                  inline-flex
+                  items-center
+                  justify-center
                   rounded-lg
-                  border border-slate-200
+                  border
+                  border-slate-200
                   bg-white
-                  px-5 py-3
-                  text-xs font-bold
+                  px-5
+                  py-3
+                  text-xs
+                  font-bold
                   text-slate-700
                   dark:border-slate-800
                   dark:bg-[#101827]
@@ -589,6 +635,10 @@ export default function About() {
     </main>
   );
 }
+
+/* ==========================================================
+   SECTION HEADER
+========================================================== */
 
 function SectionHeader({
   eyebrow,
@@ -618,20 +668,30 @@ function SectionHeader({
     >
       <div
         className="
-          mb-3 flex items-center gap-2
-          text-[10px] font-bold uppercase tracking-[0.18em]
+          mb-3
+          flex
+          items-center
+          gap-2
+          text-[10px]
+          font-bold
+          uppercase
+          tracking-[0.18em]
           text-emerald-600
           dark:text-emerald-400
-          sm:mb-4 sm:text-xs
+          sm:mb-4
+          sm:text-xs
         "
       >
         <span className="h-px w-6 bg-emerald-400 sm:w-8" />
+
         {eyebrow}
       </div>
 
       <h2
         className="
-          text-2xl font-bold tracking-tight
+          text-2xl
+          font-bold
+          tracking-tight
           sm:text-3xl
           lg:text-5xl
         "
@@ -644,10 +704,14 @@ function SectionHeader({
 
       <p
         className="
-          mt-3 text-xs leading-6
+          mt-3
+          text-xs
+          leading-6
           text-slate-600
           dark:text-slate-400
-          sm:mt-4 sm:text-sm sm:leading-7
+          sm:mt-4
+          sm:text-sm
+          sm:leading-7
           lg:text-base
         "
       >

@@ -1,964 +1,637 @@
-import { motion } from "framer-motion";
+
+import { useMemo, useState } from "react";
 import {
-  FaArrowLeft,
-  FaArrowRight,
-  FaCode,
-  FaDatabase,
-  FaMobileAlt,
-  FaPalette,
-  FaServer,
-  FaReact,
-  FaLaravel,
-  FaNodeJs,
-  FaGitAlt,
-  FaDocker,
-  FaWhatsapp,
-  FaCheck,
-  FaBolt,
-  FaLayerGroup,
-  FaShieldAlt,
-  FaRocket,
-} from "react-icons/fa";
-import { Link } from "react-router-dom";
+  FiArrowUpRight,
+  FiChevronRight,
+} from "react-icons/fi";
+
 import Navbar from "../components/Navbar";
-import MobileBottomNav from "../components/MobileBottomNav";
+import type { Project } from "../types/projet";
+// import TechnologyBadge from "../components/projets/TechnologyBadge";
+import TechnologyBadge from "../components/projets/TechnologyBadge";
+import ProjectModal from "../components/projets/ProjectModal";
 
-const services = [
+
+const projects: Project[] = [
   {
-    icon: FaCode,
-    number: "01",
-    title: "Ingénierie Full Stack",
+    id: 1,
+    title: "Obryl Platform",
+    category: "Plateformes",
+    status: "Client",
     description:
-      "Conception et développement d'applications web modernes, performantes et évolutives, de l'interface utilisateur jusqu'à l'API.",
-    technologies: ["React", "TypeScript", "Laravel", "Node.js"],
+      "Écosystème digital tout-en-un pour réservations et gestion.",
+    details:
+      "Plateforme SaaS complète destinée à centraliser les réservations et la gestion.",
+    technologies: [
+      "Next.js",
+      "Vue.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Laravel",
+      "PHP",
+      "PostgreSQL",
+      "Docker",
+    ],
   },
+
   {
-    icon: FaServer,
-    number: "02",
-    title: "Architecture Backend & APIs",
+    id: 2,
+    title: "ESCa Gestion",
+    category: "Web & Applications",
+    status: "Privé (Interne)",
     description:
-      "Conception d'APIs RESTful robustes, sécurisées et pensées pour accompagner la croissance de vos applications et services numériques.",
-    technologies: ["PHP", "Laravel", "MySQL", "REST API"],
+      "Système intégré de gestion académique, pédagogique & financière.",
+    details:
+      "Application de gestion complète pour un établissement académique.",
+    technologies: [
+      "Laravel",
+      "Livewire",
+      "Tailwind CSS",
+      "PHP",
+      "PostgreSQL",
+      "Vite",
+    ],
   },
+
   {
-    icon: FaMobileAlt,
-    number: "03",
-    title: "Applications Multiplateformes",
+    id: 3,
+    title: "Obryl App Mobile",
+    category: "Mobile iOS/Android",
+    status: "Client",
     description:
-      "Conception d'expériences mobiles modernes et réactives avec une approche orientée performance et expérience utilisateur.",
-    technologies: ["Flutter", "Android", "iOS", "API"],
+      "Application mobile native multi-plateforme iOS & Android pour voyageurs et hôtes.",
+    details:
+      "Application mobile multi-plateforme avec géolocalisation et paiements.",
+    technologies: ["Flutter", "Dart", "Laravel"],
   },
+
   {
-    icon: FaPalette,
-    number: "04",
-    title: "Design & Identité Visuelle",
+    id: 4,
+    title: "Devinsto Academy",
+    category: "Plateformes",
+    status: "Fondateur",
     description:
-      "Création d'univers visuels cohérents pour renforcer votre image de marque : identité, interfaces, supports et contenus digitaux.",
-    technologies: ["UI Design", "Photoshop", "Branding", "Social Media"],
+      "Plateforme d'apprentissage et de formation en ligne.",
+    details:
+      "Plateforme e-learning destinée à proposer des formations numériques.",
+    technologies: [
+      "Laravel",
+      "Vue.js",
+      "Inertia.js",
+      "Tailwind CSS",
+      "PostgreSQL",
+      "Linux Mint",
+      "Nginx",
+      "Docker",
+    ],
+  },
+
+  {
+    id: 5,
+    title: "Système de Gestion des Évaluations",
+    category: "Web & Applications",
+    status: "Client",
+    description:
+      "Application web Laravel pour la gestion complète des évaluations.",
+    details:
+      "Solution permettant de gérer les évaluations, résultats et données associées.",
+    technologies: [
+      "Laravel",
+      "Tailwind CSS",
+      "Alpine.js",
+      "PHP",
+      "Chart.js",
+    ],
+  },
+
+  {
+    id: 6,
+    title: "WebStage",
+    category: "Web & Applications",
+    status: "Promoteur",
+    description:
+      "Solution moderne et intuitive pour la gestion des présences et du suivi.",
+    details:
+      "Application web dédiée au suivi et à la gestion des stages.",
+    technologies: [
+      "Laravel",
+      "Vue.js",
+      "Inertia.js",
+      "Tailwind CSS",
+      "Chart.js",
+      "PostgreSQL",
+    ],
+  },
+
+  {
+    id: 7,
+    title: "ESCa – École Supérieure la Canadienne",
+    category: "Web & Applications",
+    status: "Client",
+    description:
+      "Portail institutionnel de l'École Supérieure la Canadienne.",
+    details:
+      "Portail institutionnel destiné à présenter l'établissement et ses services.",
+    technologies: ["WordPress", "PHP", "CSS", "MySQL"],
+  },
+
+  {
+    id: 8,
+    title: "CFPC – Centre de Formation la Canadienne",
+    category: "Web & Applications",
+    status: "Client",
+    description:
+      "Portail officiel du Centre de Formation Professionnelle la Canadienne.",
+    details:
+      "Portail web institutionnel destiné à présenter les formations et services.",
+    technologies: ["WordPress", "PHP", "CSS", "MySQL"],
+  },
+
+  {
+    id: 9,
+    title: "Event Style Entertainment",
+    category: "Web & Applications",
+    status: "Client",
+    description:
+      "Plateforme web pour l'agence événementielle EVENT STYLE ENTERTAINMENT.",
+    details:
+      "Site web destiné à présenter les services et activités de l'agence.",
+    technologies: [
+      "Laravel",
+      "Vue.js",
+      "Inertia.js",
+      "Tailwind CSS",
+      "MySQL",
+    ],
+  },
+
+  {
+    id: 10,
+    title: "Theway Group",
+    category: "Web & Applications",
+    status: "Client",
+    description:
+      "Portail d'imprimerie générale numérique & offset avec catalogue interactif.",
+    details:
+      "Portail permettant de présenter les services d'impression et le catalogue.",
+    technologies: ["WordPress", "CSS", "PHP", "MySQL"],
+  },
+
+  {
+    id: 11,
+    title: "Theway Print",
+    category: "Web & Applications",
+    status: "Client",
+    description:
+      "Plateforme d'imprimerie générale numérique & grand format.",
+    details:
+      "Solution web dédiée à la présentation des services d'impression.",
+    technologies: ["WordPress", "PHP", "CSS", "MySQL"],
+  },
+
+  {
+    id: 12,
+    title: "IFP Theway Group",
+    category: "Web & Applications",
+    status: "Client",
+    description:
+      "Institut de Formation Professionnelle Theway Group.",
+    details:
+      "Plateforme institutionnelle dédiée à la présentation des formations.",
+    technologies: ["WordPress", "PHP", "CSS", "MySQL"],
+  },
+
+  {
+    id: 13,
+    title: "Portfolio & Réalisations",
+    category: "Web & Applications",
+    status: "Personnel",
+    description:
+      "Portfolio professionnel présentant mes expertises, projets et réalisations.",
+    details:
+      "Portfolio moderne développé avec React, TypeScript et Tailwind CSS.",
+    technologies: ["React", "TypeScript", "Tailwind CSS"],
   },
 ];
 
-const technologies = [
-  {
-    icon: FaReact,
-    name: "React",
-    category: "Frontend",
-  },
-  {
-    icon: FaLaravel,
-    name: "Laravel",
-    category: "Backend",
-  },
-  {
-    icon: FaNodeJs,
-    name: "Node.js",
-    category: "Backend",
-  },
-  {
-    icon: FaDatabase,
-    name: "MySQL",
-    category: "Database",
-  },
-  {
-    icon: FaGitAlt,
-    name: "Git",
-    category: "Versioning",
-  },
-  {
-    icon: FaDocker,
-    name: "Docker",
-    category: "DevOps",
-  },
-];
-
-const advantages = [
-  {
-    icon: FaBolt,
-    title: "Performance",
-    text: "Des solutions rapides, optimisées et pensées pour offrir une expérience fluide.",
-  },
-  {
-    icon: FaShieldAlt,
-    title: "Fiabilité",
-    text: "Une architecture propre, maintenable et conçue pour évoluer avec votre activité.",
-  },
-  {
-    icon: FaLayerGroup,
-    title: "Vision globale",
-    text: "Une approche qui relie développement, design, produit et stratégie digitale.",
-  },
-  {
-    icon: FaRocket,
-    title: "Orientation résultat",
-    text: "Chaque choix technique doit servir un objectif concret et mesurable.",
-  },
-];
-
-const process = [
-  {
-    number: "01",
-    title: "Comprendre",
-    description:
-      "Analyse du besoin, des objectifs, des utilisateurs et des contraintes du projet.",
-  },
-  {
-    number: "02",
-    title: "Concevoir",
-    description:
-      "Architecture technique, parcours utilisateur, interface et choix technologiques.",
-  },
-  {
-    number: "03",
-    title: "Développer",
-    description:
-      "Construction progressive avec une attention particulière portée à la qualité du code.",
-  },
-  {
-    number: "04",
-    title: "Optimiser",
-    description:
-      "Tests, performances, sécurité, responsive design et amélioration continue.",
-  },
-];
-
-const program = [
-  "Ingénierie Full Stack : architectures robustes Laravel & APIs RESTful scalables",
-  "Interfaces Web Modernes : React, TypeScript, Tailwind CSS et expériences réactives",
-  "Développement Mobile Multiplateforme : applications Android & iOS",
-  "Identité Visuelle & Direction Artistique : logos, interfaces et supports digitaux",
-  "Accompagnement Tech : conception, optimisation et montée en compétences",
+const categories = [
+  "Tous",
+  "Plateformes",
+  "Mobile iOS/Android",
+  "Web & Applications",
 ];
 
 export default function Expertise() {
+  const [activeCategory, setActiveCategory] = useState("Tous");
+  const [selectedProject, setSelectedProject] =
+    useState<Project | null>(null);
+
+  const filteredProjects = useMemo(() => {
+    if (activeCategory === "Tous") {
+      return projects;
+    }
+
+    return projects.filter(
+      (project) => project.category === activeCategory
+    );
+  }, [activeCategory]);
+
   return (
-    <main
-      className="
-        min-h-screen overflow-hidden
-        bg-white text-slate-900
-        transition-colors duration-300
-        dark:bg-[#080d17] dark:text-white
-      "
-    >
-      {/* BACKGROUND */}
+    <>
+      <Navbar />
 
-      <div className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
-        <div
-          className="
-            absolute inset-0
-            bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.05),transparent_35%)]
-            dark:bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.08),transparent_35%)]
-          "
-        />
-        <div
-          className="
-          absolute inset-0 opacity-[0.18] dark:opacity-[0.3]
-          [background-image:radial-gradient(rgba(100,116,139,0.22)_1px,transparent_1px)]
-          [background-size:24px_24px]
-          "
-          />
-          <Navbar/>
-
-        <motion.div
-          animate={{
-            x: [0, 60, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute left-[-250px] top-[20%]
-            h-[400px] w-[400px]
-            rounded-full
-            bg-emerald-500/[0.025]
-            blur-[120px]
-            dark:bg-emerald-500/[0.04]
-          "
-        />
-
-        <motion.div
-          animate={{
-            x: [0, -50, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute right-[-250px] top-[45%]
-            h-[400px] w-[400px]
-            rounded-full
-            bg-blue-500/[0.02]
-            blur-[120px]
-            dark:bg-blue-500/[0.035]
-          "
-        />
-      </div>
-
-      {/* =====================================================
-          HERO
-      ===================================================== */}
-
-      <section className="relative px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-36 lg:px-8 lg:pt-40">
-        <div className="mx-auto max-w-5xl text-center">
-
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="
-              mb-5 inline-flex items-center gap-2
-              rounded-full
-              border border-emerald-400/40
-              bg-emerald-50 px-3 py-1.5
-              text-[10px] font-bold uppercase tracking-wider
-              text-emerald-600
-              dark:bg-emerald-400/[0.04]
-              dark:text-emerald-400
-              sm:px-4 sm:py-2 sm:text-xs
-            "
-          >
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-
-            Bientôt disponible
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="
-              mx-auto max-w-4xl
-              text-[2.65rem] font-black
-              leading-[0.95]
-              tracking-[-0.055em]
-              sm:text-5xl
-              md:text-6xl
-              lg:text-8xl
-            "
-          >
-            Mon Expertise
-            <span className="block">
-              &{" "}
-              <span className="text-emerald-500 dark:text-emerald-400">
-                Prestations
-              </span>
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="
-              mx-auto mt-5 max-w-2xl
-              text-xs leading-6
-              text-slate-600
-              dark:text-slate-400
-              sm:mt-7 sm:text-base sm:leading-7
-              lg:text-lg lg:leading-8
-            "
-          >
-            Une présentation détaillée de mon offre d'ingénierie logicielle,
-            de conception d'architectures modernes et d'accompagnement
-            sur-mesure pour vos ambitions digitales.
-          </motion.p>
-        </div>
-      </section>
-
-      {/* =====================================================
-          PROGRESS
-      ===================================================== */}
-
-      <section className="px-4 pb-14 sm:px-6 sm:pb-20 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="
-            mx-auto max-w-3xl
-            rounded-xl
-            border border-slate-200
-            bg-white
-            p-5
-            shadow-lg shadow-slate-200/30
-            dark:border-slate-800
-            dark:bg-[#101827]
-            dark:shadow-black/20
-            sm:p-7
-          "
-        >
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-xs font-semibold sm:text-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              Progression de conception
-            </div>
-
-            <span className="text-sm font-bold text-emerald-500 dark:text-emerald-400">
-              70%
-            </span>
-          </div>
-
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: "70%" }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 1.3,
-                ease: "easeOut",
-              }}
-              className="
-                h-full rounded-full
-                bg-emerald-500
-                shadow-[0_0_18px_rgba(52,211,153,0.35)]
-              "
-            />
-          </div>
-
-          <p className="mt-6 text-[10px] font-bold uppercase tracking-wide text-slate-700 dark:text-slate-300 sm:text-xs">
-            Au programme sur cette page
-          </p>
-
-          <div className="mt-3 space-y-2.5">
-            {program.map((item) => (
-              <div
-                key={item}
-                className="
-                  flex items-start gap-2.5
-                  text-xs leading-5
-                  text-slate-600
-                  dark:text-slate-300
-                  sm:text-sm sm:leading-6
-                "
-              >
-                <FaCheck className="mt-1 shrink-0 text-[10px] text-emerald-500 dark:text-emerald-400" />
-
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      {/* =====================================================
-          SERVICES
-      ===================================================== */}
-
-      <section className="px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-
-          <SectionHeader
-            eyebrow="Ce que je propose"
-            title="Des compétences transformées"
-            highlight="en solutions."
-            description="Une approche multidisciplinaire pour concevoir des produits numériques cohérents, performants et prêts à évoluer."
-          />
-
-          <div className="mt-9 grid gap-4 sm:mt-12 md:grid-cols-2">
-            {services.map((service, index) => {
-              const Icon = service.icon;
-
-              return (
-                <motion.article
-                  key={service.number}
-                  initial={{
-                    opacity: 0,
-                    y: 25,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                    amount: 0.1,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.08,
-                  }}
-                  whileHover={{
-                    y: -4,
-                  }}
-                  className="
-                    group relative overflow-hidden
-                    rounded-xl
-                    border border-slate-200
-                    bg-white
-                    p-5
-                    shadow-sm
-                    transition-all duration-300
-                    hover:border-emerald-400/40
-                    dark:border-slate-800
-                    dark:bg-[#101827]
-                    dark:shadow-none
-                    sm:p-7
-                  "
-                >
-                  <div className="relative">
-                    <div className="flex items-center justify-between">
-                      <div
-                        className="
-                          flex h-10 w-10 items-center justify-center
-                          rounded-lg
-                          border border-slate-200
-                          bg-slate-50
-                          text-emerald-500
-                          transition
-                          group-hover:border-emerald-400/30
-                          group-hover:bg-emerald-400/10
-                          dark:border-slate-700
-                          dark:bg-[#0b1220]
-                          dark:text-emerald-400
-                        "
-                      >
-                        <Icon className="text-sm" />
-                      </div>
-
-                      <span className="text-3xl font-black text-slate-100 dark:text-slate-800">
-                        {service.number}
-                      </span>
-                    </div>
-
-                    <h3 className="mt-6 text-lg font-bold tracking-tight sm:text-xl">
-                      {service.title}
-                    </h3>
-
-                    <p
-                      className="
-                        mt-3 text-xs leading-6
-                        text-slate-600
-                        dark:text-slate-400
-                        sm:text-sm sm:leading-7
-                      "
-                    >
-                      {service.description}
-                    </p>
-
-                    <div className="mt-5 flex flex-wrap gap-1.5 sm:mt-7 sm:gap-2">
-                      {service.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="
-                            rounded-md
-                            border border-slate-200
-                            bg-slate-50
-                            px-2.5 py-1
-                            text-[10px] font-medium
-                            text-slate-600
-                            dark:border-slate-700
-                            dark:bg-slate-900/50
-                            dark:text-slate-300
-                            sm:text-xs
-                          "
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div
-                    className="
-                      absolute bottom-0 left-0
-                      h-px w-0
-                      bg-emerald-400
-                      transition-all duration-500
-                      group-hover:w-full
-                    "
-                  />
-                </motion.article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================
-          ADVANTAGES
-      ===================================================== */}
-
-      <section
+      <main
         className="
-          border-y border-slate-200
-          bg-slate-50/70
-          px-4 py-14
-          dark:border-slate-800/70
-          dark:bg-[#0b1220]/40
-          sm:px-6 sm:py-20
-          lg:px-8
+          min-h-screen
+          bg-white
+          px-4
+          pb-20
+          pt-28
+          text-slate-900
+          dark:bg-[#080d17]
+          dark:text-white
         "
       >
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Ma façon de travailler"
-            title="Plus qu'un développeur,"
-            highlight="un partenaire."
-            description="La technologie n'est qu'un moyen. L'objectif reste de construire une solution utile, fiable et réellement adaptée à votre projet."
-          />
+        <div className="mx-auto max-w-[1320px]">
 
-          <div className="mt-9 grid gap-3 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4">
-            {advantages.map((item, index) => {
-              const Icon = item.icon;
-
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{
-                    opacity: 0,
-                    y: 20,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                  }}
-                  transition={{
-                    delay: index * 0.07,
-                  }}
-                  className="
-                    rounded-xl
-                    border border-slate-200
-                    bg-white
-                    p-5
-                    dark:border-slate-800
-                    dark:bg-[#101827]
-                    sm:p-6
-                  "
-                >
-                  <div
-                    className="
-                      mb-4 flex h-9 w-9 items-center justify-center
-                      rounded-lg
-                      bg-emerald-500/10
-                      text-emerald-500
-                      dark:text-emerald-400
-                    "
-                  >
-                    <Icon className="text-sm" />
-                  </div>
-
-                  <h3 className="text-sm font-bold sm:text-base">
-                    {item.title}
-                  </h3>
-
-                  <p
-                    className="
-                      mt-2 text-xs leading-6
-                      text-slate-600
-                      dark:text-slate-400
-                    "
-                  >
-                    {item.text}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================
-          TECHNOLOGIES
-      ===================================================== */}
-
-      <section className="px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-
-          <SectionHeader
-            eyebrow="Stack technique"
-            title="Les outils derrière"
-            highlight="mes solutions."
-            description="Un écosystème moderne choisi en fonction des besoins du projet, et non l'inverse."
-          />
-
-          <div className="mt-9 grid grid-cols-2 gap-2.5 sm:mt-12 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
-            {technologies.map((tech, index) => {
-              const Icon = tech.icon;
-
-              return (
-                <motion.div
-                  key={tech.name}
-                  initial={{
-                    opacity: 0,
-                    scale: 0.97,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    scale: 1,
-                  }}
-                  viewport={{
-                    once: true,
-                  }}
-                  transition={{
-                    delay: index * 0.05,
-                  }}
-                  whileHover={{
-                    y: -3,
-                  }}
-                  className="
-                    group rounded-xl
-                    border border-slate-200
-                    bg-white
-                    p-4
-                    text-center
-                    transition
-                    hover:border-emerald-400/30
-                    dark:border-slate-800
-                    dark:bg-[#101827]
-                    sm:p-5
-                  "
-                >
-                  <Icon
-                    className="
-                      mx-auto text-xl
-                      text-slate-400
-                      transition
-                      group-hover:text-emerald-500
-                      dark:group-hover:text-emerald-400
-                    "
-                  />
-
-                  <p className="mt-2 text-xs font-semibold sm:text-sm">
-                    {tech.name}
-                  </p>
-
-                  <p className="mt-0.5 text-[10px] text-slate-500 sm:text-[11px]">
-                    {tech.category}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================
-          PROCESS
-      ===================================================== */}
-
-      <section className="px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-
-          <SectionHeader
-            eyebrow="Méthodologie"
-            title="De l'idée"
-            highlight="à la solution."
-            description="Un processus clair pour transformer progressivement une idée en produit numérique exploitable."
-          />
-
-          <div className="relative mt-10 grid gap-7 sm:mt-14 md:grid-cols-4 md:gap-5">
-            <div className="absolute left-[12%] right-[12%] top-7 hidden h-px bg-slate-200 dark:bg-slate-800 md:block" />
-
-            {process.map((item, index) => (
-              <motion.div
-                key={item.number}
-                initial={{
-                  opacity: 0,
-                  y: 20,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                transition={{
-                  delay: index * 0.08,
-                }}
-                className="relative"
-              >
-                <div
-                  className="
-                    relative z-10
-                    flex h-11 w-11 items-center justify-center
-                    rounded-full
-                    border border-emerald-400/30
-                    bg-white
-                    text-xs font-bold
-                    text-emerald-500
-                    dark:bg-[#080d17]
-                    dark:text-emerald-400
-                  "
-                >
-                  {item.number}
-                </div>
-
-                <h3 className="mt-4 text-base font-bold">
-                  {item.title}
-                </h3>
-
-                <p
-                  className="
-                    mt-1.5 text-xs leading-6
-                    text-slate-600
-                    dark:text-slate-400
-                  "
-                >
-                  {item.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================
-          CTA
-      ===================================================== */}
-
-      <section className="px-4 pb-16 pt-6 sm:px-6 sm:pb-24 lg:px-8">
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-          }}
-          className="
-            relative mx-auto max-w-5xl overflow-hidden
-            rounded-xl
-            border border-emerald-400/20
-            bg-emerald-50
-            p-6
-            text-center
-            dark:bg-gradient-to-br
-            dark:from-emerald-400/[0.08]
-            dark:via-[#101827]
-            dark:to-[#101827]
-            sm:p-10
-          "
-        >
-          <div className="absolute -right-24 -top-24 h-56 w-56 rounded-full bg-emerald-400/[0.07] blur-3xl" />
-
-          <div className="relative">
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              Prêt à construire quelque chose ?
-            </span>
-
-            <h2
+          {/* HEADER */}
+          <div className="mb-7">
+            <span
               className="
-                mt-3 text-2xl font-black tracking-tight
-                sm:text-4xl
+                inline-flex items-center gap-2
+                rounded-md
+                border border-emerald-500
+                px-3 py-1.5
+                text-[11px]
+                font-medium
+                text-emerald-400
               "
             >
-              Parlons de votre{" "}
-              <span className="text-emerald-500 dark:text-emerald-400">
-                projet.
-              </span>
-            </h2>
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              Portfolio & Réalisations
+            </span>
+
+            <h1
+              className="
+                mt-3
+                text-4xl
+                font-medium
+                tracking-tight
+                text-slate-900
+                dark:text-white
+                md:text-5xl
+              "
+            >
+              Réalisations d'élite
+            </h1>
 
             <p
               className="
-                mx-auto mt-3 max-w-xl
-                text-xs leading-6
-                text-slate-600
+                mt-3
+                max-w-4xl
+                text-sm
+                text-slate-500
                 dark:text-slate-400
-                sm:text-sm sm:leading-7
               "
             >
-              Une idée, une application, un site ou un besoin technique ?
-              Transformons votre vision en une solution concrète.
+              Une sélection de nos plateformes numériques, applications
+              mobiles et architectures web d'envergure.
             </p>
+          </div>
 
-            <div className="mt-6 flex flex-col justify-center gap-2.5 sm:flex-row sm:gap-3">
-              <Link
-                to="/contact"
+          {/* FILTER BAR */}
+          <div
+            className="
+              mb-3
+              flex flex-col gap-3
+              md:flex-row
+              md:items-center
+              md:justify-between
+            "
+          >
+            <div
+              className="
+                inline-flex
+                w-fit
+                flex-wrap
+                gap-1
+                rounded-lg
+                border border-slate-200
+                bg-slate-100
+                p-1
+                dark:border-white/10
+                dark:bg-[#111a29]
+              "
+            >
+              {categories.map((category) => {
+                const active = activeCategory === category;
+
+                const count =
+                  category === "Tous"
+                    ? projects.length
+                    : projects.filter(
+                      (project) =>
+                        project.category === category
+                    ).length;
+
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() =>
+                      setActiveCategory(category)
+                    }
+                    className={`
+                      rounded-md
+                      px-3 py-2
+                      text-[11px]
+                      font-medium
+                      transition
+                      ${active
+                        ? "bg-white text-slate-900 shadow-sm dark:bg-[#26354b] dark:text-white"
+                        : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                      }
+                    `}
+                  >
+                    {category}
+
+                    <span
+                      className="
+                        ml-1.5
+                        text-[9px]
+                        opacity-60
+                      "
+                    >
+                      ({count})
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div
+              className="
+                flex items-center gap-2
+                text-[11px]
+                text-slate-500
+              "
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+
+              {filteredProjects.length} sur {projects.length} projets
+              affichés
+
+              <button
+                type="button"
+                onClick={() => setActiveCategory("Tous")}
                 className="
-                  group inline-flex items-center justify-center gap-2
-                  rounded-lg
-                  bg-emerald-500
-                  px-5 py-3
-                  text-xs font-bold text-slate-950
-                  shadow-[0_0_30px_rgba(52,211,153,0.15)]
+                  ml-2
                   transition
-                  hover:-translate-y-0.5
-                  hover:bg-emerald-400
-                  sm:text-sm
+                  hover:text-emerald-400
                 "
               >
-                Discuter d'un projet
-
-                <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-1" />
-              </Link>
-
-              <a
-                href="https://wa.me/237690461830"
-                target="_blank"
-                rel="noreferrer"
-                className="
-                  inline-flex items-center justify-center gap-2
-                  rounded-lg
-                  border border-slate-200
-                  bg-white
-                  px-5 py-3
-                  text-xs font-bold
-                  text-slate-800
-                  transition
-                  hover:-translate-y-0.5
-                  hover:border-emerald-400/40
-                  dark:border-slate-700
-                  dark:bg-[#111827]
-                  dark:text-white
-                  sm:text-sm
-                "
-              >
-                <FaWhatsapp className="text-emerald-500 dark:text-emerald-400" />
-
-                WhatsApp
-              </a>
+                Réduire ↑
+              </button>
             </div>
           </div>
-        </motion.div>
-      </section>
 
-      {/* =====================================================
-          BOTTOM NAV
-      ===================================================== */}
+          {/* PROJECT LIST */}
+          <div
+            className="
+              overflow-hidden
+              rounded-lg
+              border border-slate-200
+              dark:border-white/[0.08]
+            "
+          >
+            {filteredProjects.map((project) => (
+              <button
+                key={project.id}
+                type="button"
+                onClick={() => setSelectedProject(project)}
+                className="
+      group
+      flex w-full
+      flex-col
+      border-b border-slate-200
+      bg-white
+      p-4
+      text-left
+      transition
+      last:border-b-0
+      hover:bg-slate-50
 
-      <div
-        className="
-          mx-auto flex max-w-5xl
-          flex-col gap-3
-          border-t border-slate-200
-          px-4 py-6
-          dark:border-slate-800
-          sm:flex-row sm:items-center sm:justify-between
-        "
-      >
-        <Link
-          to="/about"
-          className="
-            group inline-flex items-center gap-2
-            text-xs font-semibold
+      dark:border-white/[0.07]
+      dark:bg-[#0b121e]
+      dark:hover:bg-[#101a2a]
+
+      md:flex-row
+      md:items-center
+      md:gap-4
+    "
+              >
+
+                {/* TOP : CATÉGORIE + STATUT + ACTIONS */}
+                <div
+                  className="
+        flex
+        w-full
+        items-center
+        justify-between
+        md:w-auto
+      "
+                >
+                  <div className="flex items-center gap-2">
+
+                    <span
+                      className="
+            rounded-md
+            border border-slate-300
+            bg-slate-100
+            px-2 py-1
+            text-[9px]
+            font-bold
+            uppercase
+            text-slate-600
+
+            dark:border-slate-700
+            dark:bg-[#172236]
+            dark:text-slate-300
+          "
+                    >
+                      {project.category}
+                    </span>
+
+                    <span
+                      className="
+            rounded-md
+            bg-slate-100
+            px-2 py-1
+            text-[9px]
             text-slate-500
-            transition hover:text-slate-900
+
+            dark:bg-[#111c2d]
             dark:text-slate-400
-            dark:hover:text-white
           "
-        >
-          <FaArrowLeft className="text-[10px] transition-transform group-hover:-translate-x-1" />
+                    >
+                      {project.status}
+                    </span>
 
-          Retour à propos
-        </Link>
+                  </div>
 
-        <Link
-          to="/contact"
-          className="
-            group inline-flex items-center gap-2
-            text-xs font-semibold
-            text-emerald-600
-            dark:text-emerald-400
+                  {/* ACTIONS MOBILE */}
+                  <div className="flex items-center gap-1.5 md:hidden">
+
+                    {project.demoUrl && (
+                      <span
+                        className="
+              rounded-md
+              bg-[#172236]
+              p-2
+              text-slate-400
+            "
+                      >
+                        <FiArrowUpRight size={14} />
+                      </span>
+                    )}
+
+                    <span
+                      className="
+            rounded-md
+            bg-[#172236]
+            p-2
+            text-slate-400
+            transition
+            group-hover:text-emerald-400
           "
-        >
-          Discuter d'un projet
+                    >
+                      <FiChevronRight size={16} />
+                    </span>
 
-          <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-1" />
-        </Link>
-      </div>
-      <MobileBottomNav/>
-    </main>
-  );
-}
+                  </div>
+                </div>
 
-function SectionHeader({
-  eyebrow,
-  title,
-  highlight,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  highlight: string;
-  description: string;
-}) {
-  return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 20,
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-      }}
-      viewport={{
-        once: true,
-      }}
-      className="max-w-2xl"
-    >
-      <div
-        className="
-          mb-3 flex items-center gap-2
-          text-[10px] font-bold uppercase tracking-[0.18em]
-          text-emerald-600
-          dark:text-emerald-400
-          sm:mb-4 sm:text-xs
+                {/* TITRE */}
+                <div className="mt-3 md:mt-0 md:w-[180px] md:shrink-0">
+                  <h2
+                    className="
+          text-[14px]
+          font-semibold
+          text-slate-900
+          dark:text-white
         "
-      >
-        <span className="h-px w-6 bg-emerald-400 sm:w-8" />
+                  >
+                    {project.title}
+                  </h2>
+                </div>
 
-        {eyebrow}
-      </div>
+                {/* DESCRIPTION — DESKTOP UNIQUEMENT */}
+                <div className="hidden min-w-0 flex-1 md:block">
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-500">•</span>
 
-      <h2
-        className="
-          text-2xl font-bold tracking-tight
-          sm:text-3xl
-          lg:text-5xl
+                    <p
+                      className="
+            truncate
+            text-[11px]
+            text-slate-500
+            dark:text-slate-400
+          "
+                    >
+                      {project.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* TECHNOLOGIES */}
+                <div
+                  className="
+        mt-3
+        flex
+        flex-wrap
+        gap-1.5
+
+        md:mt-0
+        md:max-w-[550px]
+        md:justify-end
+      "
+                >
+                  {project.technologies.map((technology) => (
+                    <TechnologyBadge
+                      key={technology}
+                      name={technology}
+                    />
+                  ))}
+                </div>
+
+                {/* ACTIONS DESKTOP */}
+                <div
+                  className="
+        hidden
+        shrink-0
+        items-center
+        gap-1.5
+        md:flex
+      "
+                >
+                  {project.demoUrl && (
+                    <span
+                      className="
+            rounded-md
+            bg-[#172236]
+            p-2
+            text-slate-400
+            transition
+            group-hover:text-emerald-400
+          "
+                    >
+                      <FiArrowUpRight size={14} />
+                    </span>
+                  )}
+
+                  <span
+                    className="
+          rounded-md
+          bg-[#172236]
+          p-2
+          text-slate-400
+          transition
+          group-hover:bg-emerald-500/10
+          group-hover:text-emerald-400
         "
-      >
-        {title}{" "}
-        <span className="text-emerald-500 dark:text-emerald-400">
-          {highlight}
-        </span>
-      </h2>
+                  >
+                    <FiChevronRight size={16} />
+                  </span>
+                </div>
 
-      <p
-        className="
-          mt-3 text-xs leading-6
-          text-slate-600
-          dark:text-slate-400
-          sm:mt-4 sm:text-sm sm:leading-7
-          lg:text-base
-        "
-      >
-        {description}
-      </p>
-    </motion.div>
+              </button>
+            ))}
+          </div>
+
+          {/* EMPTY STATE */}
+          {filteredProjects.length === 0 && (
+            <div
+              className="
+                py-16
+                text-center
+                text-sm
+                text-slate-500
+              "
+            >
+              Aucun projet dans cette catégorie.
+            </div>
+          )}
+
+        </div>
+      </main>
+
+      {/* PROJECT MODAL */}
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
+    </>
   );
 }

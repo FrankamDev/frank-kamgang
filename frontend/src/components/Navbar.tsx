@@ -16,6 +16,7 @@ import { useTheme } from "../context/ThemeContext";
 import LanguageSwitch from "./LanguageSwitch";
 import MobileBottomNav from "./MobileBottomNav";
 
+
 const navItems = [
   { label: "À propos", path: "/about", icon: FiUser },
   { label: "Blog", path: "/blog", icon: FiFileText },
@@ -156,6 +157,7 @@ export default function Navbar() {
         </div>
       )}
     </header>
+    
     <MobileBottomNav/>
     </>
   );

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import MobileBottomNav from "../components/MobileBottomNav";
 import AboutHero from "../components/AboutHero";
+import Footer from "../components/Footer";
 
 const skills = [
   {
@@ -58,10 +59,11 @@ const technologies = [
 
 export default function About() {
   return (
-    <main
-      className="
-        min-h-screen
-        overflow-hidden
+    
+      <main
+        className="
+      min-h-screen
+      overflow-hidden
         bg-white
         text-slate-900
         transition-colors
@@ -69,31 +71,31 @@ export default function About() {
         dark:bg-[#080d17]
         dark:text-white
       "
-    >
-      {/* =====================================================
+      >
+        {/* =====================================================
           BACKGROUND
       ===================================================== */}
 
-      <div
-        className="
+        <div
+          className="
           pointer-events-none
           fixed
           inset-0
           -z-0
           overflow-hidden
         "
-      >
-        <div
-          className="
+        >
+          <div
+            className="
             absolute
             inset-0
             bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.04),transparent_35%)]
             dark:bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.08),transparent_35%)]
           "
-        />
+          />
 
-        <div
-          className="
+          <div
+            className="
             absolute
             inset-0
             opacity-[0.15]
@@ -101,21 +103,21 @@ export default function About() {
             [background-image:radial-gradient(rgba(100,116,139,0.2)_1px,transparent_1px)]
             [background-size:24px_24px]
           "
-        />
-      </div>
+          />
+        </div>
 
-      {/* =====================================================
+        {/* =====================================================
           NAVBAR
       ===================================================== */}
 
-      <Navbar />
+        <Navbar />
 
-      {/* =====================================================
+        {/* =====================================================
           CONTENU
       ===================================================== */}
 
-      <div
-        className="
+        <div
+          className="
           mx-auto
           max-w-7xl
           px-4
@@ -126,27 +128,27 @@ export default function About() {
           sm:pt-36
           lg:px-8
         "
-      >
-        {/* =====================================================
+        >
+          {/* =====================================================
             ABOUT HERO
         ===================================================== */}
 
-        <AboutHero />
+          <AboutHero />
 
-        {/* =====================================================
+          {/* =====================================================
             DOMAINES
         ===================================================== */}
 
-        <section className="mt-16 sm:mt-24">
-          <SectionHeader
-            eyebrow="Ce que je fais"
-            title="Mes domaines de"
-            highlight="prédilection."
-            description="Un profil polyvalent qui combine développement, design et compréhension des enjeux business."
-          />
+          <section className="mt-16 sm:mt-24">
+            <SectionHeader
+              eyebrow="Ce que je fais"
+              title="Mes domaines de"
+              highlight="prédilection."
+              description="Un profil polyvalent qui combine développement, design et compréhension des enjeux business."
+            />
 
-          <div
-            className="
+            <div
+              className="
               mt-8
               grid
               gap-3
@@ -154,33 +156,33 @@ export default function About() {
               sm:grid-cols-2
               sm:gap-4
             "
-          >
-            {skills.map((skill, index) => {
-              const Icon = skill.icon;
+            >
+              {skills.map((skill, index) => {
+                const Icon = skill.icon;
 
-              return (
-                <motion.article
-                  key={skill.title}
-                  initial={{
-                    opacity: 0,
-                    y: 25,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                    amount: 0.15,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.07,
-                  }}
-                  whileHover={{
-                    y: -4,
-                  }}
-                  className="
+                return (
+                  <motion.article
+                    key={skill.title}
+                    initial={{
+                      opacity: 0,
+                      y: 25,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    viewport={{
+                      once: true,
+                      amount: 0.15,
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.07,
+                    }}
+                    whileHover={{
+                      y: -4,
+                    }}
+                    className="
                     group
                     relative
                     overflow-hidden
@@ -198,10 +200,10 @@ export default function About() {
                     dark:shadow-none
                     sm:p-7
                   "
-                >
-                  <div className="flex items-center justify-between">
-                    <div
-                      className="
+                  >
+                    <div className="flex items-center justify-between">
+                      <div
+                        className="
                         flex
                         h-10
                         w-10
@@ -216,36 +218,36 @@ export default function About() {
                         dark:bg-[#0b1220]
                         dark:text-emerald-400
                       "
-                    >
-                      <Icon className="text-sm" />
-                    </div>
+                      >
+                        <Icon className="text-sm" />
+                      </div>
 
-                    <span
-                      className="
+                      <span
+                        className="
                         text-3xl
                         font-black
                         text-slate-100
                         dark:text-slate-800
                       "
-                    >
-                      {skill.number}
-                    </span>
-                  </div>
+                      >
+                        {skill.number}
+                      </span>
+                    </div>
 
-                  <h3
-                    className="
+                    <h3
+                      className="
                       mt-6
                       text-lg
                       font-bold
                       tracking-tight
                       sm:text-xl
                     "
-                  >
-                    {skill.title}
-                  </h3>
+                    >
+                      {skill.title}
+                    </h3>
 
-                  <p
-                    className="
+                    <p
+                      className="
                       mt-2.5
                       text-xs
                       leading-6
@@ -254,13 +256,13 @@ export default function About() {
                       sm:text-sm
                       sm:leading-7
                     "
-                  >
-                    {skill.description}
-                  </p>
+                    >
+                      {skill.description}
+                    </p>
 
-                  {/* Ligne animée */}
-                  <span
-                    className="
+                    {/* Ligne animée */}
+                    <span
+                      className="
                       absolute
                       bottom-0
                       left-0
@@ -271,43 +273,43 @@ export default function About() {
                       duration-500
                       group-hover:w-full
                     "
-                  />
-                </motion.article>
-              );
-            })}
-          </div>
-        </section>
+                    />
+                  </motion.article>
+                );
+              })}
+            </div>
+          </section>
 
-        {/* =====================================================
+          {/* =====================================================
             STACK TECHNIQUE
         ===================================================== */}
 
-        <motion.section
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.6,
-          }}
-          className="mt-16 sm:mt-24"
-        >
-          <SectionHeader
-            eyebrow="Stack technique"
-            title="Les technologies que"
-            highlight="j'utilise."
-            description="Des outils modernes sélectionnés selon les besoins et les contraintes de chaque projet."
-          />
+          <motion.section
+            initial={{
+              opacity: 0,
+              y: 25,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.6,
+            }}
+            className="mt-16 sm:mt-24"
+          >
+            <SectionHeader
+              eyebrow="Stack technique"
+              title="Les technologies que"
+              highlight="j'utilise."
+              description="Des outils modernes sélectionnés selon les besoins et les contraintes de chaque projet."
+            />
 
-          <div
-            className="
+            <div
+              className="
               mt-7
               grid
               grid-cols-2
@@ -317,28 +319,28 @@ export default function About() {
               sm:gap-3
               md:grid-cols-4
             "
-          >
-            {technologies.map((tech, index) => (
-              <motion.div
-                key={tech}
-                initial={{
-                  opacity: 0,
-                  scale: 0.97,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  scale: 1,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                transition={{
-                  delay: index * 0.05,
-                }}
-                whileHover={{
-                  y: -3,
-                }}
-                className="
+            >
+              {technologies.map((tech, index) => (
+                <motion.div
+                  key={tech}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.97,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: index * 0.05,
+                  }}
+                  whileHover={{
+                    y: -3,
+                  }}
+                  className="
                   rounded-xl
                   border
                   border-slate-200
@@ -353,46 +355,46 @@ export default function About() {
                   sm:px-4
                   sm:py-4
                 "
-              >
-                <span
-                  className="
+                >
+                  <span
+                    className="
                     text-xs
                     font-semibold
                     text-slate-700
                     dark:text-slate-200
                     sm:text-sm
                   "
-                >
-                  {tech}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
+                  >
+                    {tech}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
 
-        {/* =====================================================
+          {/* =====================================================
             VISION
         ===================================================== */}
 
-        <motion.section
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.7,
-          }}
-          className="mt-16 sm:mt-24"
-        >
-          <div
-            className="
+          <motion.section
+            initial={{
+              opacity: 0,
+              y: 25,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.7,
+            }}
+            className="mt-16 sm:mt-24"
+          >
+            <div
+              className="
               relative
               overflow-hidden
               rounded-xl
@@ -406,9 +408,9 @@ export default function About() {
               dark:to-[#101827]
               sm:p-9
             "
-          >
-            <div
-              className="
+            >
+              <div
+                className="
                 absolute
                 -right-20
                 -top-20
@@ -418,11 +420,11 @@ export default function About() {
                 bg-emerald-400/[0.08]
                 blur-3xl
               "
-            />
+              />
 
-            <div className="relative max-w-3xl">
-              <span
-                className="
+              <div className="relative max-w-3xl">
+                <span
+                  className="
                   text-[10px]
                   font-bold
                   uppercase
@@ -431,12 +433,12 @@ export default function About() {
                   dark:text-emerald-400
                   sm:text-xs
                 "
-              >
-                Ma vision
-              </span>
+                >
+                  Ma vision
+                </span>
 
-              <h2
-                className="
+                <h2
+                  className="
                   mt-3
                   text-2xl
                   font-black
@@ -444,16 +446,16 @@ export default function About() {
                   sm:text-3xl
                   lg:text-4xl
                 "
-              >
-                Apprendre. Construire.
-                <span className="text-emerald-500 dark:text-emerald-400">
-                  {" "}
-                  Évoluer.
-                </span>
-              </h2>
+                >
+                  Apprendre. Construire.
+                  <span className="text-emerald-500 dark:text-emerald-400">
+                    {" "}
+                    Évoluer.
+                  </span>
+                </h2>
 
-              <p
-                className="
+                <p
+                  className="
                   mt-3
                   text-xs
                   leading-6
@@ -462,16 +464,16 @@ export default function About() {
                   sm:text-sm
                   sm:leading-7
                 "
-              >
-                Je considère chaque projet comme une occasion d'apprendre
-                quelque chose de nouveau. Mon ambition est de construire des
-                produits utiles tout en développant continuellement mes
-                compétences techniques et créatives.
-              </p>
+                >
+                  Je considère chaque projet comme une occasion d'apprendre
+                  quelque chose de nouveau. Mon ambition est de construire des
+                  produits utiles tout en développant continuellement mes
+                  compétences techniques et créatives.
+                </p>
 
-              <Link
-                to="/expertise"
-                className="
+                <Link
+                  to="/expertise"
+                  className="
                   group
                   mt-5
                   inline-flex
@@ -483,45 +485,45 @@ export default function About() {
                   dark:text-emerald-400
                   sm:text-sm
                 "
-              >
-                Découvrir mon expertise
+                >
+                  Découvrir mon expertise
 
-                <FiArrowRight
-                  className="
+                  <FiArrowRight
+                    className="
                     transition-transform
                     duration-300
                     group-hover:translate-x-1
                   "
-                />
-              </Link>
+                  />
+                </Link>
+              </div>
             </div>
-          </div>
-        </motion.section>
+          </motion.section>
 
-        {/* =====================================================
+          {/* =====================================================
             CTA
         ===================================================== */}
 
-        <motion.section
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.7,
-          }}
-          className="mt-16 pb-4 sm:mt-24"
-        >
-          <div className="text-center">
-            <p
-              className="
+          <motion.section
+            initial={{
+              opacity: 0,
+              y: 25,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.7,
+            }}
+            className="mt-16 pb-4 sm:mt-24"
+          >
+            <div className="text-center">
+              <p
+                className="
                 text-[10px]
                 font-bold
                 uppercase
@@ -530,28 +532,28 @@ export default function About() {
                 dark:text-emerald-400
                 sm:text-xs
               "
-            >
-              Un projet en tête ?
-            </p>
+              >
+                Un projet en tête ?
+              </p>
 
-            <h2
-              className="
+              <h2
+                className="
                 mt-3
                 text-2xl
                 font-black
                 tracking-tight
                 sm:text-4xl
               "
-            >
-              Construisons quelque chose
-              <span className="text-emerald-500 dark:text-emerald-400">
-                {" "}
-                d'utile.
-              </span>
-            </h2>
+              >
+                Construisons quelque chose
+                <span className="text-emerald-500 dark:text-emerald-400">
+                  {" "}
+                  d'utile.
+                </span>
+              </h2>
 
-            <p
-              className="
+              <p
+                className="
                 mx-auto
                 mt-3
                 max-w-xl
@@ -562,13 +564,13 @@ export default function About() {
                 sm:text-sm
                 sm:leading-7
               "
-            >
-              Découvrez mes projets ou contactez-moi pour discuter de votre
-              prochaine idée.
-            </p>
+              >
+                Découvrez mes projets ou contactez-moi pour discuter de votre
+                prochaine idée.
+              </p>
 
-            <div
-              className="
+              <div
+                className="
                 mt-5
                 flex
                 flex-col
@@ -576,10 +578,10 @@ export default function About() {
                 gap-2.5
                 sm:flex-row
               "
-            >
-              <Link
-                to="/projects"
-                className="
+              >
+                <Link
+                  to="/projects"
+                  className="
                   inline-flex
                   items-center
                   justify-center
@@ -596,15 +598,15 @@ export default function About() {
                   hover:bg-emerald-400
                   sm:text-sm
                 "
-              >
-                Explorer mes projets
+                >
+                  Explorer mes projets
 
-                <FiArrowRight />
-              </Link>
+                  <FiArrowRight />
+                </Link>
 
-              <Link
-                to="/contact"
-                className="
+                <Link
+                  to="/contact"
+                  className="
                   inline-flex
                   items-center
                   justify-center
@@ -622,52 +624,52 @@ export default function About() {
                   dark:text-slate-200
                   sm:text-sm
                 "
-              >
-                Me contacter
-              </Link>
+                >
+                  Me contacter
+                </Link>
+              </div>
             </div>
-          </div>
-        </motion.section>
-      </div>
+          </motion.section>
+        </div>
 
-      {/* Navigation mobile */}
-      <MobileBottomNav />
-    </main>
-  );
+        {/* Navigation mobile */}
+        <MobileBottomNav />
+      </main>
+      );
 }
 
-/* ==========================================================
-   SECTION HEADER
-========================================================== */
+      /* ==========================================================
+         SECTION HEADER
+      ========================================================== */
 
-function SectionHeader({
-  eyebrow,
-  title,
-  highlight,
-  description,
+      function SectionHeader({
+        eyebrow,
+        title,
+        highlight,
+        description,
 }: {
-  eyebrow: string;
-  title: string;
-  highlight: string;
-  description: string;
+        eyebrow: string;
+      title: string;
+      highlight: string;
+      description: string;
 }) {
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 20,
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-      }}
-      viewport={{
-        once: true,
-      }}
-      className="max-w-2xl"
-    >
-      <div
-        className="
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: 20,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        className="max-w-2xl"
+      >
+        <div
+          className="
           mb-3
           flex
           items-center
@@ -681,29 +683,29 @@ function SectionHeader({
           sm:mb-4
           sm:text-xs
         "
-      >
-        <span className="h-px w-6 bg-emerald-400 sm:w-8" />
+        >
+          <span className="h-px w-6 bg-emerald-400 sm:w-8" />
 
-        {eyebrow}
-      </div>
+          {eyebrow}
+        </div>
 
-      <h2
-        className="
+        <h2
+          className="
           text-2xl
           font-bold
           tracking-tight
           sm:text-3xl
           lg:text-5xl
         "
-      >
-        {title}{" "}
-        <span className="text-emerald-500 dark:text-emerald-400">
-          {highlight}
-        </span>
-      </h2>
+        >
+          {title}{" "}
+          <span className="text-emerald-500 dark:text-emerald-400">
+            {highlight}
+          </span>
+        </h2>
 
-      <p
-        className="
+        <p
+          className="
           mt-3
           text-xs
           leading-6
@@ -714,9 +716,10 @@ function SectionHeader({
           sm:leading-7
           lg:text-base
         "
-      >
-        {description}
-      </p>
-    </motion.div>
-  );
+        >
+          {description}
+        </p>
+        
+      </motion.div>
+    );
 }

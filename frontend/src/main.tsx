@@ -4,7 +4,7 @@ import './index.css'
 import App from './App'
 import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider } from './context/AuthContext'
-import "./i18n";
+import "./i18n/index";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -8,8 +8,9 @@ import {
 } from "react-icons/fi";
 import Navbar from "./Navbar";
 import MobileBottomNav from "./MobileBottomNav";
-
+import { useTranslation } from "react-i18next";
 export default function Hero() {
+  const { t } = useTranslation();
   return (
     <section
       className="
@@ -142,7 +143,7 @@ export default function Hero() {
               "
             >
               <img
-                src="/images/frank.png"
+                src="/images/frank.jpg"
                 alt="Frank Kamgang"
                 className="
                   h-full w-full
@@ -200,7 +201,7 @@ export default function Hero() {
                 text-emerald-500
               "
             >
-              Bonjour, je suis
+              {t("hero.greeting")}
             </motion.p>
 
             {/* Name */}
@@ -252,7 +253,7 @@ export default function Hero() {
                 lg:text-xl
               "
             >
-              Développeur Full Stack, Designer & Créateur digital
+              {t("hero.role")}
             </motion.p>
 
             {/* Description */}
@@ -295,6 +296,7 @@ export default function Hero() {
                 {" "}
                 Design Graphique.
               </span>
+              {/* {t("hero.description")} */}
             </motion.p>
 
             {/* =========================
@@ -322,7 +324,7 @@ export default function Hero() {
               {/* WhatsApp */}
 
               <a
-                href="https://wa.me/237XXXXXXXXX"
+                href="https://wa.me/237690461830"
                 className="
                   group
                   flex h-12
@@ -424,7 +426,7 @@ export default function Hero() {
               </span>
 
               <a
-                href="https://github.com/"
+                href="https://github.com/FrankamDev"
                 aria-label="GitHub"
                 className="
                   flex h-9 w-9
@@ -445,7 +447,7 @@ export default function Hero() {
               </a>
 
               <a
-                href="https://linkedin.com/"
+                href="https://www.linkedin.com/in/frank-kamgang/"
                 aria-label="LinkedIn"
                 className="
                   flex h-9 w-9
@@ -466,7 +468,7 @@ export default function Hero() {
               </a>
 
               <a
-                href="#"
+                href="/"
                 aria-label="Twitter / X"
                 className="
                   flex h-9 w-9
@@ -487,7 +489,7 @@ export default function Hero() {
               </a>
 
               <a
-                href="https://wa.me/237XXXXXXXXX"
+                href="https://wa.me/237690461830"
                 aria-label="WhatsApp"
                 className="
                   flex h-9 w-9

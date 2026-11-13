@@ -1,55 +1,112 @@
-import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { FiGlobe } from "react-icons/fi";
 
 export default function LanguageSwitch() {
-  const { i18n } = useTranslation();
+  const [language, setLanguage] = useState<"fr" | "en">(
+    (localStorage.getItem("language") as "fr" | "en") || "fr"
+  );
 
-  const toggleLanguage = () => {
-    const nextLanguage = i18n.language === "fr" ? "en" : "fr";
+  const changeLanguage = (lang: "fr" | "en") => {
+    const select = document.querySelector(
+      ".goog-te-combo"
+    ) as HTMLSelectElement | null;
 
-    i18n.changeLanguage(nextLanguage);
-    localStorage.setItem("language", nextLanguage);
+    if (!select) {
+      console.log("Google Translate n'est pas encore chargé");
+      return;
+    }
+
+    select.value = lang;
+    select.dispatchEvent(new Event("change"));
+
+    setLanguage(lang);
+    localStorage.setItem("language", lang);
   };
 
   return (
-    <button
-      onClick={toggleLanguage}
+    <div
       className="
-        flex items-center gap-1.5
-        rounded-lg border border-slate-200
-        bg-slate-50 px-2.5 py-1.5
-        text-[11px] font-bold
-        text-slate-700
-        transition
-        hover:border-emerald-500/40
+        relative flex items-center
+        h-10 w-[104px]
+        rounded-full
+        border border-slate-200
+        bg-slate-100/80
+        p-1
+        shadow-sm
+        backdrop-blur-md
         dark:border-white/10
-        dark:bg-white/[0.04]
-        dark:text-slate-300
+        dark:bg-white/[0.06]
       "
-      aria-label="Changer de langue"
     >
-      <span
-        className={
-          i18n.language === "fr"
-            ? "text-emerald-500"
-            : "text-slate-400"
-        }
+      {/* Indicateur */}
+      <div
+        className={`
+          absolute top-1 h-8 w-[48px]
+          rounded-full
+          bg-white
+          shadow-md
+          transition-all duration-300
+          dark:bg-emerald-500
+          ${
+            language === "fr"
+              ? "left-1"
+              : "left-[54px]"
+          }
+        `}
+      />
+
+      {/* Globe */}
+      <div
+        className="
+          relative z-10
+          flex h-8 w-8
+          items-center justify-center
+          text-slate-500
+          dark:text-emerald-950
+        "
+      >
+        <FiGlobe size={14} />
+      </div>
+
+      {/* FR */}
+      <button
+        type="button"
+        onClick={() => changeLanguage("fr")}
+        className={`
+          relative z-10
+          h-8 w-12
+          text-[11px] font-bold
+          tracking-wide
+          transition-colors duration-300
+          ${
+            language === "fr"
+              ? "text-slate-900 dark:text-emerald-950"
+              : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+          }
+        `}
       >
         FR
-      </span>
+      </button>
 
-      <span className="text-slate-300 dark:text-slate-600">
-        /
-      </span>
-
-      <span
-        className={
-          i18n.language === "en"
-            ? "text-emerald-500"
-            : "text-slate-400"
-        }
+      {/* EN */}
+      <button
+        type="button"
+        onClick={() => changeLanguage("en")}
+        className={`
+          relative z-10
+          h-8 w-12
+          text-[11px] font-bold
+          tracking-wide
+          transition-colors duration-300
+          ${
+            language === "en"
+              ? "text-white"
+              : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+          }
+        `}
       >
         EN
-      </span>
-    </button>
+      </button>
+    </div>
   );
 }

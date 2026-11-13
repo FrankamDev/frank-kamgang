@@ -1,54 +1,24 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-
 import {
+  FiArrowUpRight,
+  FiCheckCircle,
+  FiClock,
+  FiGlobe,
+  FiMail,
+  FiMapPin,
+  FiMessageCircle,
+  FiPhone,
+  FiSend,
+} from "react-icons/fi";
+import {
+  FaFacebookF,
   FaGithub,
   FaLinkedinIn,
   FaWhatsapp,
-  FaEnvelope,
-  FaMapMarkerAlt,
-  FaPaperPlane,
-  FaUser,
-  FaExternalLinkAlt,
-  
 } from "react-icons/fa";
 
-import {
-  HiSparkles,
-  HiOutlineClock,
-  HiCheckCircle,
-} from "react-icons/hi";
 import Navbar from "../components/Navbar";
-
-const fadeUp = {
-  hidden: {
-    opacity: 0,
-    y: 30,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: "easeOut",
-    },
-  },
-};
-
-const socialLinks = [
-  {
-    name: "LinkedIn",
-    icon: FaLinkedinIn,
-    href: "https://linkedin.com",
-    description: "Professionnel & réseau",
-  },
-  {
-    name: "GitHub",
-    icon: FaGithub,
-    href: "https://github.com",
-    description: "Mes projets & code",
-  },
-];
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -60,9 +30,11 @@ export default function Contact() {
 
   const [sent, setSent] = useState(false);
 
+  const whatsappNumber = "237690461830";
+
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      HTMLInputElement | HTMLTextAreaElement
     >
   ) => {
     setForm({
@@ -74,21 +46,22 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const whatsappMessage = `
+    const message = `
 Bonjour Frank,
 
 Nom : ${form.name}
 Email : ${form.email}
 Sujet : ${form.subject}
 
+Message :
 ${form.message}
     `.trim();
 
-    const whatsappUrl = `https://wa.me/237690461830?text=${encodeURIComponent(
-      whatsappMessage
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      message
     )}`;
 
-    window.open(whatsappUrl, "_blank");
+    window.open(url, "_blank");
 
     setSent(true);
 
@@ -97,600 +70,617 @@ ${form.message}
     }, 5000);
   };
 
+  const contactInfo = [
+    {
+      icon: FiMail,
+      label: "Email",
+      value: "contact@frankkamgang.com",
+      href: "mailto:contact@frankkamgang.com",
+    },
+    {
+      icon: FiMapPin,
+      label: "Localisation",
+      value: "Yaoundé, Cameroun",
+      href: "#",
+    },
+    {
+      icon: FiClock,
+      label: "Disponibilité",
+      value: "Lun — Sam · 08h — 18h",
+      href: "#",
+    },
+  ];
+
+  const socials = [
+    {
+      icon: FaLinkedinIn,
+      label: "LinkedIn",
+      href: "https://linkedin.com",
+    },
+    {
+      icon: FaGithub,
+      label: "GitHub",
+      href: "https://github.com",
+    },
+    {
+      icon: FaFacebookF,
+      label: "Facebook",
+      href: "https://facebook.com",
+    },
+  ];
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-white px-4 pb-24 pt-28 text-slate-900 dark:bg-[#080d17] dark:text-white sm:px-6 lg:px-8">
-
-      {/* =========================
-          BACKGROUND
-      ========================= */}
-<Navbar/>
+    <main className="relative min-h-screen overflow-hidden bg-white px-4 pb-16 pt-24 text-slate-900 dark:bg-[#080d17] dark:text-white sm:px-6 sm:pt-28 lg:px-8">
+      {/* Background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-32 top-20 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
+        <div className="absolute -right-32 top-1/3 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
 
-        <motion.div
-          animate={{
-            x: [0, 80, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute -left-40 top-20 h-80 w-80 rounded-full bg-blue-500/10 blur-[100px]"
+        <div
+          className="
+            absolute inset-0 opacity-[0.035]
+            [background-image:linear-gradient(#64748b_1px,transparent_1px),linear-gradient(90deg,#64748b_1px,transparent_1px)]
+            [background-size:40px_40px]
+          "
         />
-
-        <motion.div
-          animate={{
-            x: [0, -70, 0],
-            y: [0, -40, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute right-[-150px] top-40 h-96 w-96 rounded-full bg-violet-500/10 blur-[120px]"
-        />
-
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(15,23,42,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.04)_1px,transparent_1px)] bg-[size:40px_40px] dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]" />
-
       </div>
 
+      <Navbar />
+
       <div className="relative mx-auto max-w-7xl">
-
-        {/* =========================
-            HERO
-        ========================= */}
-
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
-          className="mx-auto mb-16 max-w-3xl text-center"
+        {/* HERO */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-10 max-w-3xl text-center sm:mb-14"
         >
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.8,
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-            }}
-            transition={{
-              duration: 0.6,
-            }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-medium text-slate-600 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/5 dark:text-slate-300"
+          <div
+            className="
+              mb-4 inline-flex items-center gap-2
+              rounded-full border border-emerald-500/20
+              bg-emerald-500/10
+              px-3 py-1.5
+              text-[10px] font-bold uppercase tracking-[0.18em]
+              text-emerald-600
+              dark:text-emerald-400
+              sm:px-4 sm:py-2 sm:text-xs
+            "
           >
-            <HiSparkles className="h-4 w-4 text-blue-500" />
+            <FiMessageCircle size={13} />
+            Parlons de votre projet
+          </div>
 
-            <span>Une idée ? Parlons-en.</span>
-          </motion.div>
-
-          <h1 className="text-4xl font-black tracking-tight sm:text-6xl lg:text-7xl">
-            Construisons quelque chose
-
-            <span className="block bg-gradient-to-r from-blue-500 via-violet-500 to-cyan-400 bg-clip-text text-transparent">
-              d'exception.
-            </span>
+          <h1
+            className="
+              text-3xl font-black tracking-tight
+              sm:text-5xl
+              lg:text-6xl
+          "
+          >
+            Construisons quelque chose{" "}
+            <span className="text-emerald-500">d’utile.</span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-400 sm:text-lg">
-            Tu as un projet web, une idée de SaaS, un besoin en design ou
-            simplement une question ? Écris-moi et discutons de ce que nous
-            pouvons créer ensemble.
-          </p>
-
-        </motion.div>
-
-        {/* =========================
-            MAIN CONTENT
-        ========================= */}
-
-        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-
-          {/* =========================
-              LEFT SIDE
-          ========================= */}
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{
-              once: true,
-              amount: 0.2,
-            }}
-            variants={fadeUp}
-            className="space-y-6"
+          <p
+            className="
+              mx-auto mt-4 max-w-2xl
+              text-sm leading-6 text-slate-600
+              dark:text-slate-400
+              sm:mt-6 sm:text-base sm:leading-7
+            "
           >
+            Une idée, un projet web ou une collaboration ?
+            Décrivez-moi votre besoin et voyons ensemble comment
+            lui donner vie.
+          </p>
+        </motion.section>
 
-            {/* WHATSAPP CARD */}
-
-            <motion.div
-              whileHover={{
-                y: -5,
-              }}
-              transition={{
-                duration: 0.3,
-              }}
-              className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 p-7 shadow-xl shadow-slate-200/30 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none"
+        {/* CONTENT */}
+        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
+          {/* LEFT */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="space-y-4"
+          >
+            {/* WHATSAPP */}
+            <div
+              className="
+                rounded-2xl border border-slate-200
+                bg-white/80 p-5 shadow-sm
+                backdrop-blur-xl
+                dark:border-white/10
+                dark:bg-white/[0.03]
+                sm:rounded-3xl sm:p-7
+              "
             >
-
-              <div className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-blue-500/10 blur-2xl transition-all duration-500 group-hover:bg-blue-500/20" />
-
-              <div className="relative">
-
-                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500">
-                  <FaWhatsapp className="h-6 w-6" />
-                </div>
-
-                <h2 className="text-2xl font-bold">
-                  Parlons de ton projet
-                </h2>
-
-                <p className="mt-3 leading-7 text-slate-600 dark:text-slate-400">
-                  Le moyen le plus simple pour me contacter reste WhatsApp.
-                  Je peux rapidement comprendre ton besoin et te répondre.
-                </p>
-
-                <a
-                  href="https://wa.me/237690461830"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group mt-7 flex items-center justify-between rounded-2xl border border-green-500/20 bg-green-500/5 px-5 py-4 transition duration-300 hover:border-green-500/40 hover:bg-green-500/10"
-                >
-
-                  <div className="flex items-center gap-3">
-
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10 text-green-500">
-                      <FaWhatsapp className="h-5 w-5" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold">
-                        WhatsApp
-                      </p>
-
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
-                        Réponse rapide
-                      </p>
-                    </div>
-
-                  </div>
-
-                 <FaExternalLinkAlt className="h-4 w-4 text-green-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-
-                </a>
-
+              <div
+                className="
+                  mb-5 flex h-11 w-11 items-center justify-center
+                  rounded-xl bg-emerald-500/10
+                  text-emerald-500
+                  sm:h-14 sm:w-14 sm:rounded-2xl
+                "
+              >
+                <FaWhatsapp size={21} />
               </div>
 
-            </motion.div>
+              <h2 className="text-xl font-bold sm:text-2xl">
+                Discutons sur WhatsApp
+              </h2>
 
-            {/* CONTACT INFOS */}
+              <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+                Pour une réponse rapide, vous pouvez directement
+                me contacter sur WhatsApp.
+              </p>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <a
+                href={`https://wa.me/${whatsappNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  mt-5 flex items-center justify-between
+                  rounded-xl border border-emerald-500/20
+                  bg-emerald-500/5
+                  px-4 py-3
+                  transition-all duration-300
+                  hover:border-emerald-500/40
+                  hover:bg-emerald-500/10
+                  sm:rounded-2xl sm:px-5 sm:py-4
+                "
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="
+                      flex h-9 w-9 items-center justify-center
+                      rounded-full bg-emerald-500
+                      text-white
+                    "
+                  >
+                    <FaWhatsapp size={16} />
+                  </div>
 
-              <InfoCard
-                icon={FaEnvelope}
-                title="Email"
-                value="contact@frankkamgang.com"
-              />
+                  <div>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white">
+                      +237 690 461 830
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Disponible sur WhatsApp
+                    </p>
+                  </div>
+                </div>
 
-              <InfoCard
-                icon={FaMapMarkerAlt}
-                title="Localisation"
-                value="Yaoundé, Cameroun"
-              />
-
-              <InfoCard
-                icon={HiOutlineClock}
-                title="Disponibilité"
-                value="Lun — Sam · 08h — 18h"
-              />
-
+                <FiArrowUpRight
+                  size={18}
+                  className="text-emerald-500"
+                />
+              </a>
             </div>
 
-            {/* SOCIALS */}
-
-            <div className="flex gap-4">
-
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
+            {/* CONTACT INFO */}
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              {contactInfo.map((item, index) => {
+                const Icon = item.icon;
 
                 return (
                   <motion.a
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    whileHover={{
-                      y: -5,
-                      scale: 1.02,
+                    key={item.label}
+                    href={item.href}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.15 + index * 0.05,
                     }}
-                    whileTap={{
-                      scale: 0.98,
-                    }}
-                    className="flex flex-1 items-center gap-3 rounded-2xl border border-slate-200 bg-white/70 p-4 backdrop-blur-xl transition hover:border-slate-300 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-white/20"
+                    className="
+                      group flex items-center gap-4
+                      rounded-xl border border-slate-200
+                      bg-white/70 p-4
+                      transition-all duration-300
+                      hover:-translate-y-0.5
+                      hover:border-emerald-500/30
+                      dark:border-white/10
+                      dark:bg-white/[0.03]
+                    "
                   >
-
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/10">
-                      <Icon className="h-5 w-5" />
+                    <div
+                      className="
+                        flex h-10 w-10 shrink-0 items-center justify-center
+                        rounded-xl bg-slate-100
+                        text-slate-600
+                        transition-colors
+                        group-hover:bg-emerald-500/10
+                        group-hover:text-emerald-500
+                        dark:bg-white/5
+                        dark:text-slate-400
+                      "
+                    >
+                      <Icon size={17} />
                     </div>
 
-                    <div>
-                      <p className="text-sm font-semibold">
-                        {social.name}
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        {item.label}
                       </p>
 
-                      <p className="text-xs text-slate-500">
-                        {social.description}
+                      <p className="mt-1 truncate text-xs font-semibold text-slate-800 dark:text-slate-200">
+                        {item.value}
                       </p>
                     </div>
 
+                    {item.href !== "#" && (
+                      <FiArrowUpRight
+                        size={15}
+                        className="
+                          ml-auto text-slate-300
+                          transition-all
+                          group-hover:-translate-y-0.5
+                          group-hover:translate-x-0.5
+                          group-hover:text-emerald-500
+                        "
+                      />
+                    )}
                   </motion.a>
                 );
               })}
-
             </div>
 
+            {/* SOCIALS */}
+            <div
+              className="
+                rounded-2xl border border-slate-200
+                bg-white/70 p-4
+                dark:border-white/10
+                dark:bg-white/[0.03]
+              "
+            >
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                Me retrouver
+              </p>
+
+              <div className="grid grid-cols-3 gap-2">
+                {socials.map((social) => {
+                  const Icon = social.icon;
+
+                  return (
+                    <a
+                      key={social.label}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="
+                        flex items-center justify-center
+                        gap-2 rounded-xl
+                        border border-slate-200
+                        bg-slate-50
+                        py-2.5
+                        text-slate-500
+                        transition-all
+                        hover:border-emerald-500/30
+                        hover:bg-emerald-500/5
+                        hover:text-emerald-500
+                        dark:border-white/10
+                        dark:bg-white/[0.03]
+                        dark:text-slate-400
+                      "
+                    >
+                      <Icon size={14} />
+                      <span className="hidden text-[10px] font-bold sm:inline">
+                        {social.label}
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
           </motion.div>
 
-          {/* =========================
-              FORM
-          ========================= */}
-
+          {/* FORM */}
           <motion.div
-            initial={{
-              opacity: 0,
-              x: 40,
-            }}
-            whileInView={{
-              opacity: 1,
-              x: 0,
-            }}
-            viewport={{
-              once: true,
-              amount: 0.2,
-            }}
-            transition={{
-              duration: 0.8,
-            }}
-            className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white/80 p-6 shadow-2xl shadow-slate-200/40 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none sm:p-8 lg:p-10"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="
+              rounded-2xl border border-slate-200
+              bg-white/80 p-5
+              shadow-sm
+              backdrop-blur-xl
+              dark:border-white/10
+              dark:bg-white/[0.03]
+              sm:rounded-3xl sm:p-7
+              lg:p-9
+            "
           >
+            <div className="mb-6 flex items-start gap-3 sm:mb-8 sm:gap-4">
+              <div
+                className="
+                  flex h-10 w-10 shrink-0 items-center justify-center
+                  rounded-xl bg-emerald-500/10
+                  text-emerald-500
+                  sm:h-12 sm:w-12 sm:rounded-2xl
+                "
+              >
+                <FiSend size={18} />
+              </div>
 
-            {/* GLOW */}
-
-            <div className="absolute -right-32 -top-32 h-64 w-64 rounded-full bg-violet-500/10 blur-3xl" />
-
-            <div className="relative">
-
-              <div className="mb-8">
-
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 text-white shadow-lg shadow-blue-500/20">
-                  <FaPaperPlane className="h-5 w-5" />
-                </div>
-
-                <h2 className="text-2xl font-bold sm:text-3xl">
+              <div>
+                <h2 className="text-xl font-bold sm:text-2xl">
                   Envoyer un message
                 </h2>
 
-                <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-                  Décris-moi ton projet. Plus tu me donnes de détails, plus
-                  je pourrai te répondre précisément.
+                <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                  Décrivez votre projet en quelques lignes.
                 </p>
-
               </div>
-
-              <form
-                onSubmit={handleSubmit}
-                className="space-y-5"
-              >
-
-                {/* NAME / EMAIL */}
-
-                <div className="grid gap-5 sm:grid-cols-2">
-
-                  <Input
-                    label="Nom"
-                    name="name"
-                    placeholder="Ton nom"
-                    value={form.name}
-                    onChange={handleChange}
-                    icon={<FaUser />}
-                  />
-
-                  <Input
-                    label="Email"
-                    name="email"
-                    type="email"
-                    placeholder="ton@email.com"
-                    value={form.email}
-                    onChange={handleChange}
-                    icon={<FaEnvelope />}
-                  />
-
-                </div>
-
-                {/* SUBJECT */}
-
-                <div>
-
-                  <label className="mb-2 block text-sm font-semibold">
-                    Sujet
-                  </label>
-
-                  <select
-                    name="subject"
-                    value={form.subject}
-                    onChange={handleChange}
-                    required
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.05]"
-                  >
-
-                    <option value="">
-                      Choisir un sujet
-                    </option>
-
-                    <option value="Création de site web">
-                      Création de site web
-                    </option>
-
-                    <option value="Application / SaaS">
-                      Application / SaaS
-                    </option>
-
-                    <option value="E-commerce">
-                      E-commerce
-                    </option>
-
-                    <option value="Design graphique">
-                      Design graphique
-                    </option>
-
-                    <option value="Collaboration">
-                      Collaboration
-                    </option>
-
-                    <option value="Autre">
-                      Autre
-                    </option>
-
-                  </select>
-
-                </div>
-
-                {/* MESSAGE */}
-
-                <div>
-
-                  <label className="mb-2 block text-sm font-semibold">
-                    Message
-                  </label>
-
-                  <textarea
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
-                    required
-                    rows={7}
-                    placeholder="Explique-moi ton projet..."
-                    className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm leading-6 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.05] dark:placeholder:text-slate-600"
-                  />
-
-                </div>
-
-                {/* SUCCESS */}
-
-                {sent && (
-                  <motion.div
-                    initial={{
-                      opacity: 0,
-                      y: 10,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    className="flex items-center gap-3 rounded-xl border border-green-500/20 bg-green-500/10 p-4 text-sm text-green-600 dark:text-green-400"
-                  >
-                    <HiCheckCircle className="h-5 w-5 shrink-0" />
-
-                    Message préparé. WhatsApp vient de s'ouvrir.
-                  </motion.div>
-                )}
-
-                {/* BUTTON */}
-
-                <motion.button
-                  type="submit"
-                  whileHover={{
-                    scale: 1.01,
-                    boxShadow:
-                      "0 15px 40px rgba(59,130,246,0.25)",
-                  }}
-                  whileTap={{
-                    scale: 0.98,
-                  }}
-                  className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-violet-600 to-blue-600 bg-[length:200%_100%] px-6 py-4 font-semibold text-white shadow-lg shadow-blue-500/20 transition-all duration-500 hover:bg-[position:100%_0]"
-                >
-
-                  <span>
-                    Envoyer le message
-                  </span>
-
-                  <FaPaperPlane className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-
-                </motion.button>
-
-                <p className="text-center text-xs text-slate-500 dark:text-slate-600">
-                  Ton message sera transmis directement via WhatsApp.
-                </p>
-
-              </form>
-
             </div>
 
-          </motion.div>
+            {sent && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="
+                  mb-5 flex items-start gap-3
+                  rounded-xl border border-emerald-500/20
+                  bg-emerald-500/10
+                  p-3.5
+                "
+              >
+                <FiCheckCircle
+                  className="mt-0.5 shrink-0 text-emerald-500"
+                  size={17}
+                />
 
+                <div>
+                  <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                    Message prêt à être envoyé
+                  </p>
+
+                  <p className="mt-1 text-[11px] leading-5 text-slate-500 dark:text-slate-400">
+                    WhatsApp vient de s’ouvrir avec votre message.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* NAME + EMAIL */}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-slate-500"
+                  >
+                    Nom
+                  </label>
+
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Votre nom"
+                    className="
+                      w-full rounded-xl
+                      border border-slate-200
+                      bg-slate-50
+                      px-3.5 py-3
+                      text-xs text-slate-900
+                      outline-none
+                      transition
+                      placeholder:text-slate-400
+                      focus:border-emerald-500
+                      focus:ring-2
+                      focus:ring-emerald-500/10
+                      dark:border-white/10
+                      dark:bg-white/[0.03]
+                      dark:text-white
+                    "
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-slate-500"
+                  >
+                    Email
+                  </label>
+
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="vous@email.com"
+                    className="
+                      w-full rounded-xl
+                      border border-slate-200
+                      bg-slate-50
+                      px-3.5 py-3
+                      text-xs text-slate-900
+                      outline-none
+                      transition
+                      placeholder:text-slate-400
+                      focus:border-emerald-500
+                      focus:ring-2
+                      focus:ring-emerald-500/10
+                      dark:border-white/10
+                      dark:bg-white/[0.03]
+                      dark:text-white
+                    "
+                  />
+                </div>
+              </div>
+
+              {/* SUBJECT */}
+              <div>
+                <label
+                  htmlFor="subject"
+                  className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-slate-500"
+                >
+                  Sujet
+                </label>
+
+                <input
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  required
+                  value={form.subject}
+                  onChange={handleChange}
+                  placeholder="Création d'un site web..."
+                  className="
+                    w-full rounded-xl
+                    border border-slate-200
+                    bg-slate-50
+                    px-3.5 py-3
+                    text-xs text-slate-900
+                    outline-none
+                    transition
+                    placeholder:text-slate-400
+                    focus:border-emerald-500
+                    focus:ring-2
+                    focus:ring-emerald-500/10
+                    dark:border-white/10
+                    dark:bg-white/[0.03]
+                    dark:text-white
+                  "
+                />
+              </div>
+
+              {/* MESSAGE */}
+              <div>
+                <label
+                  htmlFor="message"
+                  className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-slate-500"
+                >
+                  Message
+                </label>
+
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows={5}
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="Parlez-moi de votre projet..."
+                  className="
+                    w-full resize-none rounded-xl
+                    border border-slate-200
+                    bg-slate-50
+                    px-3.5 py-3
+                    text-xs leading-5
+                    text-slate-900
+                    outline-none
+                    transition
+                    placeholder:text-slate-400
+                    focus:border-emerald-500
+                    focus:ring-2
+                    focus:ring-emerald-500/10
+                    dark:border-white/10
+                    dark:bg-white/[0.03]
+                    dark:text-white
+                  "
+                />
+              </div>
+
+              {/* SUBMIT */}
+              <button
+                type="submit"
+                className="
+                  group flex w-full items-center
+                  justify-center gap-2
+                  rounded-xl
+                  bg-emerald-500
+                  px-5 py-3
+                  text-xs font-black
+                  text-[#03100a]
+                  transition-all duration-300
+                  hover:bg-emerald-400
+                  hover:shadow-lg
+                  hover:shadow-emerald-500/20
+                  active:scale-[0.98]
+                "
+              >
+                Envoyer le message
+
+                <FiArrowUpRight
+                  size={16}
+                  className="
+                    transition-transform
+                    group-hover:-translate-y-0.5
+                    group-hover:translate-x-0.5
+                  "
+                />
+              </button>
+
+              <p className="flex items-center justify-center gap-2 text-[10px] text-slate-400">
+                <FiGlobe size={12} />
+                Réponse généralement sous 24h
+              </p>
+            </form>
+          </motion.div>
         </div>
 
-        {/* =========================
-            BOTTOM CTA
-        ========================= */}
-
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 30,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.8,
-          }}
-          className="relative mt-10 overflow-hidden rounded-3xl border border-blue-500/10 bg-gradient-to-br from-blue-500/10 via-violet-500/5 to-transparent p-8 text-center sm:p-12"
+        {/* BOTTOM CTA */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="
+            mt-6 overflow-hidden
+            rounded-2xl border border-emerald-500/10
+            bg-emerald-500/[0.06]
+            p-6
+            text-center
+            sm:mt-8 sm:rounded-3xl sm:p-10
+          "
         >
-
-          <motion.div
-            animate={{
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute -right-20 -top-20 h-40 w-40 rounded-full border border-blue-500/10"
+          <FiPhone
+            className="mx-auto mb-3 text-emerald-500"
+            size={22}
           />
 
-          <h3 className="relative text-2xl font-bold sm:text-3xl">
-            Un projet en tête ?
-          </h3>
+          <h2 className="text-xl font-black sm:text-2xl">
+            Vous avez une idée ?
+          </h2>
 
-          <p className="relative mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-            Même si ton idée n'est encore qu'au stade de concept, tu peux
-            m'en parler.
+          <p className="mx-auto mt-2 max-w-xl text-xs leading-5 text-slate-500 dark:text-slate-400 sm:text-sm">
+            Même si votre projet n’est pas encore parfaitement défini,
+            vous pouvez me contacter. Nous pouvons commencer par en
+            discuter.
           </p>
 
           <a
-            href="https://wa.me/237690461830"
+            href={`https://wa.me/${whatsappNumber}`}
             target="_blank"
-            rel="noreferrer"
-            className="relative mt-6 inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-1 hover:shadow-xl dark:bg-white dark:text-slate-900"
+            rel="noopener noreferrer"
+            className="
+              mt-5 inline-flex items-center gap-2
+              rounded-xl
+              bg-slate-900
+              px-5 py-3
+              text-xs font-bold text-white
+              transition
+              hover:bg-emerald-500
+              hover:text-[#03100a]
+              dark:bg-white
+              dark:text-slate-900
+              dark:hover:bg-emerald-500
+            "
           >
-            <FaWhatsapp className="h-4 w-4" />
-
+            <FaWhatsapp size={15} />
             Démarrer une discussion
           </a>
-
-        </motion.div>
-
+        </motion.section>
       </div>
     </main>
-  );
-}
-
-/* =================================
-   INPUT
-================================= */
-
-function Input({
-  label,
-  name,
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-  icon,
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  placeholder: string;
-  value: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  icon?: React.ReactNode;
-}) {
-  return (
-    <div>
-
-      <label className="mb-2 block text-sm font-semibold">
-        {label}
-      </label>
-
-      <div className="relative">
-
-        {icon && (
-          <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-            {icon}
-          </div>
-        )}
-
-        <input
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          required
-          className={`w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.05] dark:placeholder:text-slate-600 ${
-            icon ? "pl-11 pr-4" : "px-4"
-          }`}
-        />
-
-      </div>
-
-    </div>
-  );
-}
-
-/* =================================
-   INFO CARD
-================================= */
-
-function InfoCard({
-  icon: Icon,
-  title,
-  value,
-}: {
-  icon: React.ElementType;
-  title: string;
-  value: string;
-}) {
-  return (
-    <motion.div
-      whileHover={{
-        x: 5,
-      }}
-      className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white/70 p-4 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]"
-    >
-
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300">
-        <Icon className="h-5 w-5" />
-      </div>
-
-      <div>
-
-        <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
-          {title}
-        </p>
-
-        <p className="mt-1 text-sm font-semibold">
-          {value}
-        </p>
-
-      </div>
-
-    </motion.div>
   );
 }

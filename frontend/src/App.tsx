@@ -22,8 +22,10 @@ export default function App() {
       </main>
     );
   }
-
+  
   return (
+    <>
+    <div id="google_translate_element" className="hidden" />
     <BrowserRouter>
       <Routes>
         {/* ==================== */}
@@ -48,5 +50,6 @@ export default function App() {
         <Route path="/admin/categories" element={<AdminCategories />} />
       </Routes>
     </BrowserRouter>
+    </>
   );
 }

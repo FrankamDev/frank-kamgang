@@ -1,61 +1,51 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
+
+// Public pages
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminCategories from "./pages/admin/AdminCategories";
-import AdminLayout from "./pages/admin/AdminLayout";
+import Expertise from "./pages/Expertise";
 import Contact from "./pages/Contact";
 
+// Admin pages
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminCategories from "./pages/admin/AdminCategories";
 
 export default function App() {
   function Placeholder({ title }: { title: string }) {
     return (
-      <main className="min-h-screen bg-[#070d16] px-6 pt-32 text-white">
+      <main className="min-h-screen bg-white px-6 pt-32 text-slate-900 dark:bg-[#070d16] dark:text-white">
         <h1 className="text-4xl font-bold">{title}</h1>
       </main>
     );
   }
+
   return (
     <BrowserRouter>
-      {/* <Navbar /> */}
-
       <Routes>
+        {/* ==================== */}
+        {/* PUBLIC ROUTES */}
+        {/* ==================== */}
+
         <Route path="/" element={<Home />} />
-
-        <Route
-          path="/about"
-          element={<About />}
-        />
-
-        <Route
-          path="/blog"
-          element={<Blog />}
-        />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route
-          path="/projects"
-          element={<Projects />}
-        />
-        <Route path="/admin" element={<AdminLayout />} />
-        <Route
-          path="/admin/categories"
-          element={<AdminCategories />}
-        />
+        <Route path="/about" element={<About />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/expertise" element={<Expertise />} />
+        <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route
-          path="/setup"
-          element={<Placeholder title="Setup" />}
-        />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/setup" element={<Placeholder title="Setup" />} />
 
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
+        {/* ==================== */}
+        {/* ADMIN ROUTES */}
+        {/* ==================== */}
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />} />
+        <Route path="/admin/categories" element={<AdminCategories />} />
       </Routes>
     </BrowserRouter>
   );

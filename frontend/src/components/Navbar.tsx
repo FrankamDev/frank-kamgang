@@ -13,6 +13,7 @@ import {
 } from "react-icons/fi";
 
 import { useTheme } from "../context/ThemeContext";
+import LanguageSwitch from "./LanguageSwitch";
 
 const navItems = [
   { label: "À propos", path: "/about", icon: FiUser },
@@ -28,7 +29,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed left-1/2 top-3 z-50 w-[calc(100%-24px)] max-w-[720px] -translate-x-1/2">
+      <header className="fixed left-1/2 top-3 z-150 w-[calc(100%-24px)] max-w-[720px] -translate-x-1/2">
         <nav
           className="
             flex h-14 items-center justify-between rounded-full
@@ -71,10 +72,9 @@ export default function Navbar() {
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `text-sm font-medium transition ${
-                    isActive
-                      ? "text-emerald-500"
-                      : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                  `text-sm font-medium transition ${isActive
+                    ? "text-emerald-500"
+                    : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                   }`
                 }
               >
@@ -82,7 +82,7 @@ export default function Navbar() {
               </NavLink>
             ))}
           </div>
-
+          <LanguageSwitch />
           {/* ACTIONS */}
           <div className="flex items-center gap-2">
             <button
@@ -134,10 +134,9 @@ export default function Navbar() {
                   to={item.path}
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-xl px-4 py-3 text-sm ${
-                      isActive
-                        ? "bg-emerald-500/10 text-emerald-500"
-                        : "text-slate-600 dark:text-slate-300"
+                    `flex items-center gap-3 rounded-xl px-4 py-3 text-sm ${isActive
+                      ? "bg-emerald-500/10 text-emerald-500"
+                      : "text-slate-600 dark:text-slate-300"
                     }`
                   }
                 >
@@ -168,10 +167,9 @@ export default function Navbar() {
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex min-w-[60px] flex-col items-center gap-1 text-[10px] ${
-                    isActive
-                      ? "text-emerald-500"
-                      : "text-slate-400 dark:text-slate-500"
+                  `flex min-w-[60px] flex-col items-center gap-1 text-[10px] ${isActive
+                    ? "text-emerald-500"
+                    : "text-slate-400 dark:text-slate-500"
                   }`
                 }
               >

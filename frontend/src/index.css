@@ -18,7 +18,9 @@ body {
   background: #080d17;
   color: #f8fafc;
 }
-
+* {
+  box-sizing: border-box;
+}
 .toolbar-btn {
   @apply rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium
   transition hover:bg-slate-100

@@ -30,7 +30,7 @@ export default function AdminDashboard() {
           <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-900">
             <p className="text-sm text-slate-500">Articles</p>
             <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
-              0
+              0ddd
             </p>
           </div>
 

@@ -12,13 +12,14 @@ import {
   ChevronRight,
   Loader2,
 } from "lucide-react";
-
+import ProjectsManager from "./ProjectsManager";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import api from "../../api/axios";
 
 import CategoriesManager from "./CategoriesManager";
 import PostsManager from "./PostsManager";
+
 
 type Section =
   | "dashboard"
@@ -239,10 +240,9 @@ export default function AdminLayout() {
 
           lg:translate-x-0
 
-          ${
-            sidebarOpen
-              ? "translate-x-0"
-              : "-translate-x-full"
+          ${sidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full"
           }
         `}
       >
@@ -345,7 +345,9 @@ export default function AdminLayout() {
       {/* ==================================================
           MAIN
       ================================================== */}
-
+      <div className="fixed right-4 top-24 z-[999] rounded-lg bg-red-600 px-4 py-2 text-white">
+        Section : {activeSection}
+      </div>
       <main className="min-h-screen lg:ml-[280px]">
         {/* DESKTOP TOPBAR */}
 
@@ -396,12 +398,9 @@ export default function AdminLayout() {
 
         <div
           className="
-            mx-auto w-full
-            max-w-7xl
-            p-4
-            sm:p-6
-            lg:p-8
-          "
+    mx-auto w-full max-w-7xl
+    p-4 sm:p-6 lg:p-8
+  "
         >
           {activeSection === "dashboard" && (
             <DashboardHome
@@ -412,17 +411,13 @@ export default function AdminLayout() {
             />
           )}
 
-          {activeSection === "posts" && (
-            <PostsManager />
-          )}
+          {activeSection === "posts" && <PostsManager />}
 
           {activeSection === "categories" && (
             <CategoriesManager />
           )}
-
-          {activeSection === "projects" && (
-            <Placeholder title="Projets" />
-          )}
+          {activeSection === "projects" && <ProjectsManager />}
+          
         </div>
       </main>
     </div>
@@ -446,18 +441,17 @@ function NavItem({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`
-        flex w-full items-center
-        justify-between
+        flex w-full items-center justify-between
         rounded-xl px-3 py-3
         text-sm font-medium
         transition
 
-        ${
-          active
-            ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-            : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+        ${active
+          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+          : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
         }
       `}
     >
@@ -466,9 +460,7 @@ function NavItem({
         {label}
       </span>
 
-      {active && (
-        <ChevronRight size={16} />
-      )}
+      {active && <ChevronRight size={16} />}
     </button>
   );
 }

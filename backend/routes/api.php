@@ -41,9 +41,12 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy']);
 
     // Projects
-    Route::post('/admin/projects', [ProjectController::class, 'store']);
-    Route::put('/admin/projects/{project}', [ProjectController::class, 'update']);
-    Route::delete('/admin/projects/{project}', [ProjectController::class, 'destroy']);
+   Route::get('/projects', [ProjectController::class, 'index']);
+Route::get('/projects/{slug}', [ProjectController::class, 'show']);
+
+Route::post('/admin/projects', [ProjectController::class, 'store']);
+Route::put('/admin/projects/{project}', [ProjectController::class, 'update']);
+Route::delete('/admin/projects/{project}', [ProjectController::class, 'destroy']);
 
     Route::get('/user', function (Request $request) {
         return $request->user();

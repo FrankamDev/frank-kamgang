@@ -7,6 +7,7 @@ import {
 } from "react-icons/fi";
 import api from "../services/api";
 import MobileBottomNav from "../components/MobileBottomNav";
+import Navbar from "../components/Navbar";
 
 interface Project {
   id: number;
@@ -58,6 +59,7 @@ export default function Projects() {
         lg:px-8
       "
     >
+      <Navbar/>
       <div className="mx-auto max-w-6xl">
 
         {/* =================================================

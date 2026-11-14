@@ -143,7 +143,7 @@ export default function Hero() {
               "
             >
               <img
-                src="/images/frank.jpg"
+                src="/images/me.png"
                 alt="Frank Kamgang"
                 className="
                   h-full w-full

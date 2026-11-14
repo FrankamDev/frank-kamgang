@@ -158,7 +158,7 @@ export default function Blog() {
       {/* ================================================================
           HERO
       ================================================================= */}
-<Navbar/>
+      <Navbar />
       <section className="mx-auto max-w-[1240px] px-5 pb-12 pt-24 sm:px-8 lg:px-10 lg:pb-16 lg:pt-32">
 
         <motion.div
@@ -230,11 +230,10 @@ export default function Blog() {
 
           <button
             onClick={() => setActiveCategory("all")}
-            className={`whitespace-nowrap text-[13px] transition ${
-              activeCategory === "all"
+            className={`whitespace-nowrap text-[13px] transition ${activeCategory === "all"
                 ? "font-semibold text-slate-950 dark:text-white"
                 : "text-slate-400 hover:text-slate-950 dark:hover:text-white"
-            }`}
+              }`}
           >
             Tous
           </button>
@@ -245,11 +244,10 @@ export default function Blog() {
               onClick={() =>
                 setActiveCategory(category.slug)
               }
-              className={`whitespace-nowrap text-[13px] transition ${
-                activeCategory === category.slug
+              className={`whitespace-nowrap text-[13px] transition ${activeCategory === category.slug
                   ? "font-semibold text-slate-950 dark:text-white"
                   : "text-slate-400 hover:text-slate-950 dark:hover:text-white"
-              }`}
+                }`}
             >
               {category.name}
             </button>
@@ -306,40 +304,99 @@ export default function Blog() {
                 FEATURED ARTICLE
             =========================================================== */}
 
-            {featuredPost && (
+            {/* ==========================================================
+    FEATURED ARTICLE
+=========================================================== */}
 
+            {featuredPost && (
               <motion.article
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => openPost(featuredPost.slug)}
-                className="group cursor-pointer border-y border-slate-200 dark:border-slate-800 lg:grid lg:grid-cols-[1.15fr_0.85fr]"
+                className="
+      group cursor-pointer
+      overflow-hidden rounded-2xl
+      border border-slate-200
+      bg-white
+      dark:border-slate-800
+      dark:bg-[#0d1522]
+
+      lg:grid
+      lg:grid-cols-[1.15fr_0.85fr]
+      lg:rounded-none
+      lg:border-y
+      lg:border-x-0
+      lg:bg-transparent
+      dark:lg:bg-transparent
+    "
               >
 
                 {/* IMAGE */}
 
-                <div className="relative aspect-[16/10] overflow-hidden bg-slate-200 dark:bg-slate-800 lg:aspect-auto lg:min-h-[470px]">
+                <div
+                  className="
+        relative aspect-[16/9]
+        overflow-hidden
+        bg-slate-200
+        dark:bg-slate-800
 
+        sm:aspect-[16/8]
+
+        lg:aspect-auto
+        lg:min-h-[470px]
+      "
+                >
                   {featuredPost.image && (
                     <img
                       src={featuredPost.image}
                       alt={featuredPost.title}
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                      className="
+            h-full w-full object-cover
+            transition duration-700
+            group-hover:scale-[1.03]
+          "
                     />
                   )}
 
-                  <div className="absolute left-5 top-5 bg-white px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-950 dark:bg-slate-950 dark:text-white">
+                  <div
+                    className="
+          absolute left-3 top-3
+          rounded-md
+          bg-white/95
+          px-2.5 py-1.5
+          text-[9px]
+          font-bold
+          uppercase
+          tracking-wider
+          text-slate-950
+          backdrop-blur
+          dark:bg-slate-950/90
+          dark:text-white
+        "
+                  >
                     À la une
                   </div>
-
                 </div>
 
                 {/* CONTENT */}
 
-                <div className="flex flex-col justify-center border-x border-b border-slate-200 p-7 dark:border-slate-800 sm:p-10 lg:border-b-0 lg:p-12">
+                <div
+                  className="
+        flex flex-col justify-center
+        border-t border-slate-200
+        p-5
+        dark:border-slate-800
 
-                  <div className="flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-wide text-slate-400">
+        sm:p-7
 
-                    <span className="font-semibold text-slate-950 dark:text-white">
+        lg:border-y-0
+        lg:border-x
+        lg:p-12
+      "
+                >
+
+                  <div className="flex flex-wrap items-center gap-2 text-[9px] uppercase tracking-wide text-slate-400">
+                    <span className="font-semibold text-emerald-500">
                       {featuredPost.category?.name}
                     </span>
 
@@ -348,42 +405,89 @@ export default function Blog() {
                     <span>
                       {formatDate(featuredPost.published_at)}
                     </span>
-
                   </div>
 
-                  <h2 className="mt-5 text-[29px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[35px]">
+                  <h2
+                    className="
+          mt-3
+          text-[20px]
+          font-bold
+          leading-[1.12]
+          tracking-[-0.03em]
+
+          sm:text-[28px]
+
+          lg:mt-5
+          lg:text-[35px]
+        "
+                  >
                     {featuredPost.title}
                   </h2>
 
-                  <p className="mt-5 text-[14px] leading-7 text-slate-500 dark:text-slate-400 sm:text-[15px]">
+                  <p
+                    className="
+          mt-3
+          line-clamp-2
+          text-[11px]
+          leading-5
+          text-slate-500
+          dark:text-slate-400
+
+          sm:text-[14px]
+          sm:leading-6
+
+          lg:mt-5
+          lg:text-[15px]
+        "
+                  >
                     {featuredPost.excerpt}
                   </p>
 
-                  <div className="mt-8 flex w-fit items-center gap-2 text-[13px] font-semibold">
-                    Lire l'article
+                  <div
+                    className="
+          mt-5
+          flex w-fit items-center gap-2
+          text-[11px]
+          font-semibold
+          text-emerald-500
 
-                    <ArrowUpRight
-                      size={16}
-                      strokeWidth={1.8}
-                    />
+          sm:mt-7
+          sm:text-[13px]
+        "
+                  >
+                    Lire l'article
+                    <ArrowUpRight size={14} />
                   </div>
 
                 </div>
-
               </motion.article>
-
             )}
 
             {/* ==========================================================
                 ARTICLE GRID
             =========================================================== */}
 
-            {otherPosts.length > 0 && (
+            {/* ==========================================================
+    ARTICLE GRID
+=========================================================== */}
 
-              <div className="mt-16 grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+            {otherPosts.length > 0 && (
+              <div
+                className="
+      mt-10
+      grid
+      gap-3
+
+      md:mt-16
+      md:grid-cols-2
+      md:gap-x-8
+      md:gap-y-16
+
+      lg:grid-cols-3
+    "
+              >
 
                 {otherPosts.map((post, index) => (
-
                   <motion.article
                     key={post.id}
                     initial={{
@@ -398,18 +502,63 @@ export default function Blog() {
                       delay: index * 0.05,
                     }}
                     onClick={() => openPost(post.slug)}
-                    className="group cursor-pointer"
+                    className="
+          group
+          cursor-pointer
+
+          rounded-xl
+          border border-slate-200
+          bg-white
+          p-2.5
+
+          transition-all
+          duration-300
+
+          hover:-translate-y-1
+          hover:border-emerald-500/30
+          hover:shadow-lg
+          hover:shadow-slate-200/40
+
+          dark:border-slate-800
+          dark:bg-[#0d1522]
+          dark:hover:border-emerald-500/30
+          dark:hover:shadow-black/20
+
+          md:rounded-none
+          md:border-0
+          md:bg-transparent
+          md:p-0
+          md:hover:translate-y-0
+          md:hover:shadow-none
+        "
                   >
 
                     {/* IMAGE */}
 
-                    <div className="relative aspect-[16/10] overflow-hidden bg-slate-200 dark:bg-slate-800">
+                    <div
+                      className="
+            relative
+            aspect-[16/9]
+            overflow-hidden
+            rounded-lg
 
+            bg-slate-200
+            dark:bg-slate-800
+
+            md:rounded-none
+          "
+                    >
                       {post.image && (
                         <img
                           src={post.image}
                           alt={post.title}
-                          className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                          loading="lazy"
+                          className="
+                h-full w-full
+                object-cover
+                transition duration-500
+                group-hover:scale-[1.03]
+              "
                         />
                       )}
 
@@ -417,11 +566,23 @@ export default function Blog() {
 
                     {/* CONTENT */}
 
-                    <div className="mt-5">
+                    <div className="px-1.5 pb-1.5 pt-3 md:px-0 md:pb-0 md:pt-5">
 
-                      <div className="flex items-center gap-3 text-[10px] font-medium uppercase tracking-wide text-slate-400">
+                      {/* META */}
 
-                        <span className="text-slate-950 dark:text-white">
+                      <div
+                        className="
+              flex items-center gap-2
+              text-[8px]
+              font-semibold
+              uppercase
+              tracking-wider
+              text-slate-400
+
+              md:text-[10px]
+            "
+                      >
+                        <span className="text-emerald-500">
                           {post.category?.name}
                         </span>
 
@@ -430,34 +591,74 @@ export default function Blog() {
                         <span>
                           {formatDate(post.published_at)}
                         </span>
-
                       </div>
 
-                      <h3 className="mt-3 text-[21px] font-semibold leading-[1.12] tracking-[-0.025em]">
+                      {/* TITLE */}
+
+                      <h3
+                        className="
+              mt-2
+              line-clamp-2
+              text-[14px]
+              font-bold
+              leading-[1.2]
+              tracking-[-0.02em]
+
+              transition-colors
+              group-hover:text-emerald-500
+
+              md:mt-3
+              md:text-[21px]
+            "
+                      >
                         {post.title}
                       </h3>
 
-                      <p className="mt-3 line-clamp-2 text-[13px] leading-6 text-slate-500 dark:text-slate-400">
+                      {/* EXCERPT */}
+
+                      <p
+                        className="
+              mt-2
+              line-clamp-2
+              text-[10px]
+              leading-[1.5]
+              text-slate-500
+              dark:text-slate-400
+
+              md:mt-3
+              md:text-[13px]
+              md:leading-6
+            "
+                      >
                         {post.excerpt}
                       </p>
 
-                      <div className="mt-5 inline-flex items-center gap-2 text-[12px] font-semibold">
-                        Lire
+                      {/* LINK */}
 
-                        <ArrowUpRight
-                          size={15}
-                          strokeWidth={1.8}
-                        />
+                      <div
+                        className="
+              mt-3
+              inline-flex
+              items-center
+              gap-1.5
+              text-[9px]
+              font-bold
+              text-emerald-500
+
+              md:mt-5
+              md:text-[12px]
+            "
+                      >
+                        Lire
+                        <ArrowUpRight size={13} />
                       </div>
 
                     </div>
 
                   </motion.article>
-
                 ))}
 
               </div>
-
             )}
 
           </>

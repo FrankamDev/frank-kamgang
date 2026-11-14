@@ -9,7 +9,7 @@ interface AboutHeroProps {
 }
 
 export default function AboutHero({
-  image = "/images/frank.jpg",
+  image = "/images/me.png",
 }: AboutHeroProps) {
   return (
     <section
@@ -214,7 +214,7 @@ export default function AboutHero({
           "
         >
           <a
-            href="https://wa.me/237XXXXXXXXX"
+            href="https://wa.me/237690461830"
             target="_blank"
             rel="noopener noreferrer"
             className="

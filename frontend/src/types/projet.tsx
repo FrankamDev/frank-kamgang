@@ -12,25 +12,30 @@ export interface Project {
   id: number;
 
   title: string;
+  slug?: string;
 
-  category:
-    | "Plateformes"
-    | "Mobile iOS/Android"
-    | "Web & Applications";
+  category: string;
+  categoryLabel?: string;
 
   status: string;
 
   description: string;
+  shortDescription?: string;
 
-  details: string;
+  // Utilisé actuellement dans Expertise.tsx / ProjectsSection.tsx
+  details?: string;
 
-  technologies: string[];
+  // Utilisé par ProjectModal / nouvelle structure
+  presentation?: string;
 
   architecture?: ProjectArchitecture;
 
   modules?: ProjectModule[];
 
-  demoUrl?: string;
+  technologies: string[];
 
+  demoUrl?: string;
   githubUrl?: string;
+
+  featured?: boolean;
 }

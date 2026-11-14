@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import MobileBottomNav from "../components/MobileBottomNav";
 import AboutHero from "../components/AboutHero";
-import Footer from "../components/Footer";
+
 
 const skills = [
   {

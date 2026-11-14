@@ -7,7 +7,7 @@ import {
     Trash2,
     X,
     //   Github,
-    ExternalLink,
+    // ExternalLink,
     Star,
 } from "lucide-react";
 

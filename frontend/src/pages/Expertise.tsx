@@ -6,10 +6,11 @@ import {
 } from "react-icons/fi";
 
 import Navbar from "../components/Navbar";
-import type { Project } from "../types/projet";
+
 // import TechnologyBadge from "../components/projets/TechnologyBadge";
 import TechnologyBadge from "../components/projets/TechnologyBadge";
 import ProjectModal from "../components/projets/ProjectModal";
+import type { Project } from "../types/projet";
 
 
 const projects: Project[] = [

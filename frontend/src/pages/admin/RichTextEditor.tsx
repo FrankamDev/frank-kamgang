@@ -14,7 +14,6 @@ import {
   TableHeader,
   TableCell,
 } from "@tiptap/extension-table";
-
 import {
   Bold,
   Italic,
@@ -108,7 +107,7 @@ export default function RichTextEditor({
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
-      
+
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-1 border-b border-slate-200 bg-slate-50 p-2 dark:border-slate-700 dark:bg-slate-800">
 

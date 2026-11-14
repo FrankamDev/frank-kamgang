@@ -1,5 +1,5 @@
 import { FiArrowRight, FiExternalLink } from "react-icons/fi";
-import type { Project } from "../../types/project";
+import type { Project } from "../../types/projet";
 
 interface ProjectRowProps {
   project: Project;
@@ -14,17 +14,14 @@ export default function ProjectRow({
     <div
       onClick={() => onOpen(project)}
       className="
-        group grid cursor-pointer
-        grid-cols-1 gap-3
+        group grid cursor-pointer grid-cols-1 gap-3
         border-b border-slate-200/80
         px-3 py-3
         transition-colors duration-200
         last:border-b-0
         hover:bg-slate-50/80
-
         dark:border-white/[0.06]
         dark:hover:bg-white/[0.025]
-
         sm:grid-cols-[auto_auto_minmax(180px,1fr)_auto_auto]
         sm:items-center
         sm:gap-2
@@ -43,7 +40,6 @@ export default function ProjectRow({
             px-2.5 py-1
             text-[9px] font-bold uppercase
             tracking-wide text-slate-600
-
             dark:border-slate-700
             dark:bg-[#172235]
             dark:text-slate-300
@@ -134,26 +130,33 @@ export default function ProjectRow({
       </div>
 
       {/* TECHNOLOGIES */}
-      <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-        {project.technologies.slice(0, 8).map((technology) => (
-          <span
-            key={technology}
-            className="
-              inline-flex shrink-0 items-center
-              rounded-md
-              border border-slate-200
-              bg-slate-100
-              px-2 py-1
-              text-[9px] font-medium
-              text-slate-500
-              dark:border-white/[0.06]
-              dark:bg-[#111b2b]
-              dark:text-slate-400
-            "
-          >
-            {technology}
-          </span>
-        ))}
+      <div
+        className="
+          flex min-w-0 flex-wrap
+          items-center gap-1.5
+        "
+      >
+        {project.technologies
+          .slice(0, 8)
+          .map((technology) => (
+            <span
+              key={technology}
+              className="
+                inline-flex shrink-0 items-center
+                rounded-md
+                border border-slate-200
+                bg-slate-100
+                px-2 py-1
+                text-[9px] font-medium
+                text-slate-500
+                dark:border-white/[0.06]
+                dark:bg-[#111b2b]
+                dark:text-slate-400
+              "
+            >
+              {technology}
+            </span>
+          ))}
       </div>
 
       {/* EXTERNAL LINK */}

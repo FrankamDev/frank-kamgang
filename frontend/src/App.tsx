@@ -13,7 +13,7 @@ import Contact from "./pages/Contact";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminCategories from "./pages/admin/AdminCategories";
-import Footer from "./components/Footer";
+
 
 export default function App() {
   function Placeholder({ title }: { title: string }) {

@@ -13,6 +13,7 @@ interface Post {
   title: string;
   slug: string;
   excerpt: string;
+  content: string;
   image?: string | null;
   published_at: string | null;
   category?: Category | null;
@@ -82,21 +83,17 @@ export default function LatestArticles() {
         px-4
         py-16
         text-white
-
         sm:px-6
         sm:py-20
-
         lg:px-8
       "
     >
       <div className="mx-auto max-w-6xl">
-
         {/* ==========================
             HEADER
         ========================== */}
 
         <div className="max-w-2xl">
-
           <div
             className="
               inline-flex
@@ -129,7 +126,6 @@ export default function LatestArticles() {
               text-3xl
               font-medium
               tracking-tight
-
               sm:text-4xl
             "
           >
@@ -145,7 +141,6 @@ export default function LatestArticles() {
               text-sm
               leading-6
               text-slate-400
-
               sm:text-base
               sm:leading-7
             "
@@ -174,7 +169,6 @@ export default function LatestArticles() {
               font-semibold
               text-white
               transition
-
               hover:border-emerald-500/30
               hover:bg-[#162238]
             "
@@ -193,7 +187,6 @@ export default function LatestArticles() {
         ========================== */}
 
         <div className="mt-8 space-y-5">
-
           {loading ? (
             <>
               <ArticleSkeleton />
@@ -228,14 +221,11 @@ export default function LatestArticles() {
                   border-white/[0.08]
                   bg-[#101827]
                   p-5
-
                   transition-all
                   duration-300
-
                   hover:-translate-y-1
                   hover:border-emerald-500/30
                   hover:bg-[#111c2d]
-
                   sm:p-6
                 "
               >
@@ -298,10 +288,8 @@ export default function LatestArticles() {
                     leading-snug
                     tracking-tight
                     text-white
-
                     transition-colors
                     group-hover:text-emerald-400
-
                     sm:text-xl
                   "
                 >
@@ -317,7 +305,6 @@ export default function LatestArticles() {
                     text-xs
                     leading-6
                     text-slate-400
-
                     sm:text-sm
                     sm:leading-6
                   "

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   LayoutDashboard,
   FileText,
@@ -12,20 +12,20 @@ import {
   ChevronRight,
   Loader2,
 } from "lucide-react";
+
 import ProjectsManager from "./ProjectsManager";
+import CategoriesManager from "./CategoriesManager";
+import PostsManager from "./PostsManager";
+
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import api from "../../api/axios";
 
-import CategoriesManager from "./CategoriesManager";
-import PostsManager from "./PostsManager";
+/* =========================================================
+   TYPES
+========================================================= */
 
-
-type Section =
-  | "dashboard"
-  | "posts"
-  | "categories"
-  | "projects";
+type Section = "dashboard" | "posts" | "categories" | "projects";
 
 interface Stats {
   posts: number;
@@ -33,35 +33,48 @@ interface Stats {
   projects: number;
 }
 
-const navigation = [
+interface NavigationItem {
+  id: Section;
+  label: string;
+  icon: React.ComponentType<{ size?: number }>;
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const navigation: NavigationItem[] = [
   {
-    id: "dashboard" as Section,
+    id: "dashboard",
     label: "Dashboard",
     icon: LayoutDashboard,
   },
   {
-    id: "posts" as Section,
+    id: "posts",
     label: "Articles",
     icon: FileText,
   },
   {
-    id: "categories" as Section,
+    id: "categories",
     label: "Catégories",
     icon: Folder,
   },
   {
-    id: "projects" as Section,
+    id: "projects",
     label: "Projets",
     icon: Briefcase,
   },
 ];
 
+/* =========================================================
+   MAIN COMPONENT
+========================================================= */
+
 export default function AdminLayout() {
   const [activeSection, setActiveSection] =
     useState<Section>("dashboard");
 
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [stats, setStats] = useState<Stats>({
     posts: 0,
@@ -69,28 +82,30 @@ export default function AdminLayout() {
     projects: 0,
   });
 
-  const [statsLoading, setStatsLoading] =
-    useState(true);
-
+  const [statsLoading, setStatsLoading] = useState(true);
   const [error, setError] = useState("");
 
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
-  /**
-   * Charger les statistiques
-   */
+  /* =======================================================
+     CHARGER LES STATISTIQUES
+  ======================================================= */
+
   async function loadStats() {
     try {
       setStatsLoading(true);
       setError("");
 
-      const [postsResponse, categoriesResponse, projectsResponse] =
-        await Promise.all([
-          api.get("/posts"),
-          api.get("/categories"),
-          api.get("/projects"),
-        ]);
+      const [
+        postsResponse,
+        categoriesResponse,
+        projectsResponse,
+      ] = await Promise.all([
+        api.get("/posts"),
+        api.get("/categories"),
+        api.get("/projects"),
+      ]);
 
       setStats({
         posts: Array.isArray(postsResponse.data)
@@ -120,20 +135,26 @@ export default function AdminLayout() {
     loadStats();
   }, []);
 
-  /**
-   * Changer de section
-   */
+  /* =======================================================
+     CHANGER DE SECTION
+  ======================================================= */
+
   function selectSection(section: Section) {
     setActiveSection(section);
     setSidebarOpen(false);
   }
 
-  /**
-   * Déconnexion
-   */
+  /* =======================================================
+     DÉCONNEXION
+  ======================================================= */
+
   async function handleLogout() {
     await logout();
   }
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <div
@@ -161,7 +182,10 @@ export default function AdminLayout() {
           lg:hidden
         "
       >
+        {/* Menu */}
+
         <button
+          type="button"
           onClick={() =>
             setSidebarOpen((prev) => !prev)
           }
@@ -180,6 +204,8 @@ export default function AdminLayout() {
           )}
         </button>
 
+        {/* Logo */}
+
         <div className="text-center">
           <p className="text-sm font-bold">
             Frank<span className="text-blue-500">.</span>
@@ -190,7 +216,10 @@ export default function AdminLayout() {
           </p>
         </div>
 
+        {/* Theme */}
+
         <button
+          type="button"
           onClick={toggleTheme}
           className="
             flex h-10 w-10 items-center justify-center
@@ -237,12 +266,11 @@ export default function AdminLayout() {
           transition-transform duration-300
           dark:border-slate-800
           dark:bg-[#0b1120]
-
           lg:translate-x-0
-
-          ${sidebarOpen
-            ? "translate-x-0"
-            : "-translate-x-full"
+          ${
+            sidebarOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
           }
         `}
       >
@@ -278,9 +306,7 @@ export default function AdminLayout() {
                 key={item.id}
                 icon={<Icon size={19} />}
                 label={item.label}
-                active={
-                  activeSection === item.id
-                }
+                active={activeSection === item.id}
                 onClick={() =>
                   selectSection(item.id)
                 }
@@ -326,6 +352,7 @@ export default function AdminLayout() {
           </div>
 
           <button
+            type="button"
             onClick={handleLogout}
             className="
               flex w-full items-center gap-3
@@ -345,9 +372,7 @@ export default function AdminLayout() {
       {/* ==================================================
           MAIN
       ================================================== */}
-      <div className="fixed right-4 top-24 z-[999] rounded-lg bg-red-600 px-4 py-2 text-white">
-        Section : {activeSection}
-      </div>
+
       <main className="min-h-screen lg:ml-[280px]">
         {/* DESKTOP TOPBAR */}
 
@@ -373,6 +398,7 @@ export default function AdminLayout() {
           </div>
 
           <button
+            type="button"
             onClick={toggleTheme}
             className="
               flex h-10 w-10
@@ -381,6 +407,7 @@ export default function AdminLayout() {
               hover:bg-slate-100
               dark:hover:bg-slate-800
             "
+            aria-label="Changer le thème"
           >
             {theme === "dark" ? (
               <Sun size={19} />
@@ -398,35 +425,48 @@ export default function AdminLayout() {
 
         <div
           className="
-    mx-auto w-full max-w-7xl
-    p-4 sm:p-6 lg:p-8
-  "
+            mx-auto w-full max-w-7xl
+            p-4 sm:p-6 lg:p-8
+          "
         >
+          {/* DASHBOARD */}
+
           {activeSection === "dashboard" && (
             <DashboardHome
               stats={stats}
               loading={statsLoading}
               error={error}
               onRefresh={loadStats}
+              onNavigate={selectSection}
             />
           )}
 
-          {activeSection === "posts" && <PostsManager />}
+          {/* ARTICLES */}
+
+          {activeSection === "posts" && (
+            <PostsManager />
+          )}
+
+          {/* CATÉGORIES */}
 
           {activeSection === "categories" && (
             <CategoriesManager />
           )}
-          {activeSection === "projects" && <ProjectsManager />}
-          
+
+          {/* PROJETS */}
+
+          {activeSection === "projects" && (
+            <ProjectsManager />
+          )}
         </div>
       </main>
     </div>
   );
 }
 
-/* ==================================================
+/* =========================================================
    NAV ITEM
-================================================== */
+========================================================= */
 
 function NavItem({
   icon,
@@ -434,7 +474,7 @@ function NavItem({
   active,
   onClick,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   active: boolean;
   onClick: () => void;
@@ -448,10 +488,10 @@ function NavItem({
         rounded-xl px-3 py-3
         text-sm font-medium
         transition
-
-        ${active
-          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-          : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+        ${
+          active
+            ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+            : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
         }
       `}
     >
@@ -465,35 +505,53 @@ function NavItem({
   );
 }
 
-/* ==================================================
+/* =========================================================
    DASHBOARD
-================================================== */
+========================================================= */
 
 function DashboardHome({
   stats,
   loading,
   error,
   onRefresh,
+  onNavigate,
 }: {
   stats: Stats;
   loading: boolean;
   error: string;
   onRefresh: () => void;
+  onNavigate: (section: Section) => void;
 }) {
   return (
     <div>
       {/* HEADER */}
 
       <div className="mb-8">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wider text-blue-500">
+        <p
+          className="
+            mb-2
+            text-xs font-medium uppercase
+            tracking-wider text-blue-500
+          "
+        >
           Tableau de bord
         </p>
 
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        <h1
+          className="
+            text-2xl font-bold tracking-tight
+            sm:text-3xl
+          "
+        >
           Bonjour, bienvenue.
         </h1>
 
-        <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+        <p
+          className="
+            mt-2 max-w-xl
+            text-sm leading-6 text-slate-500
+          "
+        >
           Gérez votre portfolio, vos articles,
           catégories et projets depuis cet espace.
         </p>
@@ -512,9 +570,10 @@ function DashboardHome({
             dark:text-red-400
           "
         >
-          {error}
+          <span>{error}</span>
 
           <button
+            type="button"
             onClick={onRefresh}
             className="ml-2 font-semibold underline"
           >
@@ -562,23 +621,32 @@ function DashboardHome({
           Accès rapide
         </h2>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          className="
+            grid gap-3
+            sm:grid-cols-2
+            lg:grid-cols-3
+          "
+        >
           <QuickAction
             icon={<FileText size={19} />}
             title="Articles"
             description="Créer et gérer vos articles"
+            onClick={() => onNavigate("posts")}
           />
 
           <QuickAction
             icon={<Folder size={19} />}
             title="Catégories"
             description="Organiser vos contenus"
+            onClick={() => onNavigate("categories")}
           />
 
           <QuickAction
             icon={<Briefcase size={19} />}
             title="Projets"
             description="Gérer votre portfolio"
+            onClick={() => onNavigate("projects")}
           />
         </div>
       </div>
@@ -586,9 +654,9 @@ function DashboardHome({
   );
 }
 
-/* ==================================================
+/* =========================================================
    STAT CARD
-================================================== */
+========================================================= */
 
 function StatCard({
   title,
@@ -598,7 +666,7 @@ function StatCard({
 }: {
   title: string;
   value: number;
-  icon: React.ReactNode;
+  icon: ReactNode;
   loading: boolean;
 }) {
   return (
@@ -606,8 +674,7 @@ function StatCard({
       className="
         rounded-2xl
         border border-slate-200
-        bg-white
-        p-4
+        bg-white p-4
         transition
         hover:-translate-y-0.5
         hover:shadow-lg
@@ -616,7 +683,11 @@ function StatCard({
         sm:p-5
       "
     >
-      <div className="mb-4 flex items-center justify-between">
+      <div
+        className="
+          mb-4 flex items-center justify-between
+        "
+      >
         <div
           className="
             flex h-9 w-9
@@ -644,7 +715,12 @@ function StatCard({
           />
         </div>
       ) : (
-        <p className="mt-1 text-2xl font-bold sm:text-3xl">
+        <p
+          className="
+            mt-1 text-2xl font-bold
+            sm:text-3xl
+          "
+        >
           {value}
         </p>
       )}
@@ -652,22 +728,25 @@ function StatCard({
   );
 }
 
-/* ==================================================
+/* =========================================================
    QUICK ACTION
-================================================== */
+========================================================= */
 
 function QuickAction({
   icon,
   title,
   description,
+  onClick,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
+  onClick: () => void;
 }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="
         flex items-center gap-4
         rounded-2xl
@@ -708,15 +787,18 @@ function QuickAction({
 
       <ChevronRight
         size={16}
-        className="ml-auto shrink-0 text-slate-400"
+        className="
+          ml-auto shrink-0
+          text-slate-400
+        "
       />
     </button>
   );
 }
 
-/* ==================================================
-   TITLE
-================================================== */
+/* =========================================================
+   SECTION TITLE
+========================================================= */
 
 function getSectionTitle(section: Section) {
   switch (section) {
@@ -732,35 +814,4 @@ function getSectionTitle(section: Section) {
     default:
       return "Dashboard";
   }
-}
-
-/* ==================================================
-   PLACEHOLDER
-================================================== */
-
-function Placeholder({
-  title,
-}: {
-  title: string;
-}) {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">
-        {title}
-      </h1>
-
-      <div
-        className="
-          mt-6 rounded-2xl
-          border border-dashed
-          border-slate-300
-          p-10 text-center
-          text-sm text-slate-500
-          dark:border-slate-700
-        "
-      >
-        Module {title} — nous allons le construire ici.
-      </div>
-    </div>
-  );
 }

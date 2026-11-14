@@ -8,7 +8,7 @@ import {
 } from "react-icons/fi";
 
 import TechnologyBadge from "./TechnologyBadge";
-import type { Project } from "../../types/project";
+import type { Project } from "../../types/projet";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -45,13 +45,11 @@ export default function ProjectModal({
       {project && (
         <div
           className="
-            fixed
-            inset-0
-            z-[100]
-            flex
-            items-center
-            justify-center
+            fixed inset-0 z-[100]
+            flex items-center justify-center
+            bg-black/60
             p-4
+            backdrop-blur-md
             md:p-8
           "
           onMouseDown={(event) => {
@@ -86,24 +84,16 @@ export default function ProjectModal({
               w-full
               max-w-[560px]
               max-h-[85vh]
-
               overflow-y-auto
-
               rounded-2xl
-
               border
               border-white/[0.10]
-
               bg-[#111a2b]
-
               text-white
-
               shadow-[0_30px_100px_rgba(0,0,0,0.55)]
-
               scrollbar-thin
               scrollbar-track-transparent
               scrollbar-thumb-slate-600
-
               md:max-w-[620px]
             "
             onMouseDown={(event) => {
@@ -121,7 +111,6 @@ export default function ProjectModal({
                 px-5
                 pb-4
                 pt-5
-
                 md:px-6
                 md:pt-6
               "
@@ -136,7 +125,6 @@ export default function ProjectModal({
               >
                 {/* INFOS PROJET */}
                 <div className="min-w-0">
-
                   {/* CATÉGORIE + STATUT */}
                   <div
                     className="
@@ -160,7 +148,7 @@ export default function ProjectModal({
                         text-slate-300
                       "
                     >
-                      {project.category}
+                      {project.categoryLabel}
                     </span>
 
                     <span
@@ -221,9 +209,7 @@ export default function ProjectModal({
                     rounded-md
                     p-1.5
                     text-slate-400
-
                     transition
-
                     hover:bg-white/5
                     hover:text-white
                   "
@@ -238,7 +224,6 @@ export default function ProjectModal({
             ================================= */}
 
             <div className="px-5 py-5 md:px-6 md:py-6">
-
               {/* ================================
                   PRÉSENTATION
               ================================= */}
@@ -271,7 +256,7 @@ export default function ProjectModal({
                     text-slate-300
                   "
                 >
-                  {project.details}
+                  {project.presentation}
                 </p>
               </section>
 
@@ -281,7 +266,6 @@ export default function ProjectModal({
 
               {project.architecture && (
                 <section className="mt-6">
-
                   {/* TITRE */}
                   <div
                     className="
@@ -309,7 +293,6 @@ export default function ProjectModal({
                   </div>
 
                   <div className="space-y-3">
-
                     {/* FRONTEND */}
                     <div
                       className="
@@ -416,7 +399,6 @@ export default function ProjectModal({
               {project.modules &&
                 project.modules.length > 0 && (
                   <section className="mt-6">
-
                     {/* TITRE */}
                     <div
                       className="
@@ -445,7 +427,6 @@ export default function ProjectModal({
 
                     {/* LISTE MODULES */}
                     <div className="space-y-2.5">
-
                       {project.modules.map(
                         (module, index) => (
                           <div
@@ -454,10 +435,8 @@ export default function ProjectModal({
                               rounded-md
                               bg-[#080e18]
                               p-3.5
-
                               transition
                               duration-200
-
                               hover:bg-[#0d1624]
                             "
                           >
@@ -468,8 +447,7 @@ export default function ProjectModal({
                                 text-white
                               "
                             >
-                              {index + 1}.{" "}
-                              {module.title}
+                              {index + 1}. {module.title}
                             </h4>
 
                             <p
@@ -485,7 +463,6 @@ export default function ProjectModal({
                           </div>
                         )
                       )}
-
                     </div>
                   </section>
                 )}
@@ -539,51 +516,42 @@ export default function ProjectModal({
                     gap-2
                   "
                 >
-
                   {/* ACCÉDER AU SITE */}
-                  {project.demoUrl && (
-                    <motion.a
-                      href={project.demoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{
-                        y: -2,
-                      }}
-                      whileTap={{
-                        scale: 0.97,
-                      }}
-                      className="
-                        inline-flex
-                        items-center
-                        gap-2
+                  {project.demoUrl &&
+                    project.demoUrl !== "#" && (
+                      <motion.a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{
+                          y: -2,
+                        }}
+                        whileTap={{
+                          scale: 0.97,
+                        }}
+                        className="
+                          inline-flex
+                          items-center
+                          gap-2
+                          rounded-md
+                          border
+                          border-slate-600
+                          bg-[#17243a]
+                          px-4
+                          py-2
+                          text-xs
+                          font-semibold
+                          text-white
+                          transition
+                          hover:border-emerald-500/40
+                          hover:text-emerald-400
+                        "
+                      >
+                        Accéder au site
 
-                        rounded-md
-
-                        border
-                        border-slate-600
-
-                        bg-[#17243a]
-
-                        px-4
-                        py-2
-
-                        text-xs
-                        font-semibold
-                        text-white
-
-                        transition
-
-                        hover:border-emerald-500/40
-                        hover:text-emerald-400
-                      "
-                    >
-                      Accéder au site
-
-                      <FiArrowUpRight
-                        size={14}
-                      />
-                    </motion.a>
-                  )}
+                        <FiArrowUpRight size={14} />
+                      </motion.a>
+                    )}
 
                   {/* FERMER */}
                   <motion.button
@@ -597,28 +565,20 @@ export default function ProjectModal({
                     }}
                     className="
                       rounded-md
-
                       border
                       border-white/10
-
                       bg-[#17243a]
-
                       px-4
                       py-2
-
                       text-xs
                       font-semibold
-
                       text-slate-300
-
                       transition
-
                       hover:text-white
                     "
                   >
                     Fermer
                   </motion.button>
-
                 </div>
               </div>
             </div>

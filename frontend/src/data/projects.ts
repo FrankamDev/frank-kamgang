@@ -1,217 +1,183 @@
-import type { Project } from "../types/project";
+// import type { Project } from "../types/projet";
+
+import type { Project } from "../types/projet";
 
 export const projects: Project[] = [
-    {
-        id: 1,
-        title: "Obryl Platform",
-        slug: "obryl-platform",
+  {
+    id: 1,
+    title: "Obryl Platform",
+    slug: "obryl-platform",
 
-        category: "plateformes",
-        categoryLabel: "PLATEFORME SAAS",
+    category: "plateformes",
+    categoryLabel: "PLATEFORME SAAS",
+    status: "Client",
 
-        status: "Client",
+    shortDescription:
+      "Écosystème digital tout-en-un pour réservations, hébergements, véhicules et circuits touristiques.",
 
-        shortDescription:
-            "Écosystème digital tout-en-un pour réservations, hébergements, véhicules et circuits touristiques.",
+    description:
+      "Écosystème Digital & Marketplace Multi-Services",
 
-        description:
-            "Écosystème Digital & Marketplace Multi-Services",
+    presentation:
+      "Architecture moderne complète combinant marketplace de locations d'hébergements, gestion de flottes de véhicules et circuits touristiques sécurisés par paiements séquestrés avec GeniusPay.",
 
-        presentation:
-            "Architecture moderne complète combinant marketplace de locations d'hébergements, gestion de flottes de véhicules et circuits touristiques sécurisés par paiements séquestrés avec GeniusPay.",
-
-        architecture: {
-            frontend: [
-                "Next.js",
-                "Vue.js",
-                "TypeScript",
-                "Tailwind CSS",
-            ],
-
-            backend: [
-                "Laravel",
-                "PostgreSQL",
-                "Docker",
-            ],
-        },
-
-        modules: [
-            {
-                title: "Réservations d'Hébergements",
-                description:
-                    "Gestion dynamique des disponibilités, calendrier interactif, tarification saisonnière et messagerie intégrée.",
-            },
-            {
-                title: "Location de Véhicules & Chauffeurs",
-                description:
-                    "Flotte géolocalisée, réservation avec ou sans chauffeur, vérification des permis et caution automatisée.",
-            },
-        ],
-
-        modules: [
-            {
-                title: "Réservations d'Hébergements",
-                description:
-                    "Gestion dynamique des disponibilités, calendrier interactif, tarification saisonnière et messagerie intégrée hôte-voyageur.",
-            },
-
-            {
-                title: "Location de Véhicules & Chauffeurs",
-                description:
-                    "Flotte géolocalisée, réservation avec ou sans chauffeur, vérification des permis et caution automatisée.",
-            },
-
-            {
-                title: "Circuits Touristiques & Guides",
-                description:
-                    "Réservation d'expériences guidées, itinéraires cartographiques et gestion des créneaux horaires.",
-            },
-
-            {
-                title: "Paiements Sécurisés & Séquestre GeniusPay",
-                description:
-                    "Paiement en ligne par cartes bancaires et Mobile Money avec déblocage des fonds à la validation du séjour.",
-            },
-        ],
-
-        technologies: [
-            "Nuxt",
-            "Vue.js",
-            "TypeScript",
-            "Tailwind CSS",
-            "Laravel",
-            "PHP",
-            "PostgreSQL",
-            "Docker",
-        ],
-
-        demoUrl: "#",
-        featured: true,
+    architecture: {
+      frontend: [
+        "Next.js",
+        "Vue.js",
+        "TypeScript",
+        "Tailwind CSS",
+      ],
+      backend: [
+        "Laravel",
+        "PostgreSQL",
+        "Docker",
+      ],
     },
 
-    {
-        id: 2,
-        title: "ESCa Gestion",
-        slug: "esca-gestion",
-
-        category: "web",
-        categoryLabel: "ERP ACADÉMIQUE",
-
-        status: "Privé (Interne)",
-
-        shortDescription:
-            "Système intégré de gestion académique, pédagogique et financière pour l'école.",
-
+    modules: [
+      {
+        title: "Réservations d'Hébergements",
         description:
-            "Système Intégré de Gestion Académique, Pédagogique & Financière",
+          "Gestion dynamique des disponibilités, calendrier interactif, tarification saisonnière et messagerie intégrée.",
+      },
+      {
+        title: "Location de Véhicules & Chauffeurs",
+        description:
+          "Flotte géolocalisée, réservation avec ou sans chauffeur, vérification des permis et caution automatisée.",
+      },
+    ],
 
-        presentation:
-            "Plateforme de gestion destinée à centraliser les opérations académiques, pédagogiques et administratives d'un établissement.",
+    technologies: [
+      "Nuxt",
+      "Vue.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Laravel",
+      "PHP",
+      "PostgreSQL",
+      "Docker",
+    ],
 
-        architecture: {
-            frontend: [
-                "Livewire",
-                "Tailwind CSS",
-                "Vite",
-            ],
+    demoUrl: "#",
+    featured: true,
+  },
 
-            backend: [
-                "Laravel",
-                "PHP",
-                "PostgreSQL",
-            ],
-        },
+  {
+    id: 2,
+    title: "ESCa Gestion",
+    slug: "esca-gestion",
 
-        modules: [
-            {
-                title: "Gestion des étudiants",
-                description:
-                    "Gestion des dossiers étudiants et des informations académiques.",
-            },
+    category: "web",
+    categoryLabel: "ERP ACADÉMIQUE",
+    status: "Privé (Interne)",
 
-            {
-                title: "Gestion pédagogique",
-                description:
-                    "Organisation des formations, matières et informations pédagogiques.",
-            },
+    shortDescription:
+      "Système intégré de gestion académique, pédagogique et financière pour l'école.",
 
-            {
-                title: "Gestion administrative",
-                description:
-                    "Centralisation des opérations administratives et financières.",
-            },
-        ],
+    description:
+      "Système Intégré de Gestion Académique, Pédagogique & Financière",
 
-        technologies: [
-            "Laravel",
-            "Livewire",
-            "Tailwind CSS",
-            "PHP",
-            "PostgreSQL",
-            "Vite",
-        ],
+    presentation:
+      "Plateforme de gestion destinée à centraliser les opérations académiques, pédagogiques et administratives d'un établissement.",
 
-        demoUrl: "#",
-        featured: true,
+    architecture: {
+      frontend: [
+        "Livewire",
+        "Tailwind CSS",
+        "Vite",
+      ],
+      backend: [
+        "Laravel",
+        "PHP",
+        "PostgreSQL",
+      ],
     },
 
-    {
-        id: 3,
-        title: "Obryl App Mobile",
-        slug: "obryl-app-mobile",
-
-        category: "mobile",
-        categoryLabel: "MOBILE IOS/ANDROID",
-
-        status: "Client",
-
-        shortDescription:
-            "Application mobile native multi-plateforme iOS & Android pour voyageurs et hôtes.",
-
+    modules: [
+      {
+        title: "Gestion des étudiants",
         description:
-            "Application mobile native multi-plateforme iOS & Android",
+          "Gestion des dossiers étudiants et des informations académiques.",
+      },
+      {
+        title: "Gestion pédagogique",
+        description:
+          "Organisation des formations, matières et informations pédagogiques.",
+      },
+      {
+        title: "Gestion administrative",
+        description:
+          "Centralisation des opérations administratives et financières.",
+      },
+    ],
 
-        presentation:
-            "Application mobile pensée pour permettre aux voyageurs et aux hôtes d'accéder aux fonctionnalités principales de l'écosystème Obryl depuis leurs appareils mobiles.",
+    technologies: [
+      "Laravel",
+      "Livewire",
+      "Tailwind CSS",
+      "PHP",
+      "PostgreSQL",
+      "Vite",
+    ],
 
-        architecture: {
-            frontend: [
-                "Flutter",
-                "Dart",
-            ],
+    demoUrl: "#",
+    featured: true,
+  },
 
-            backend: [
-                "Laravel",
-            ],
-        },
+  {
+    id: 3,
+    title: "Obryl App Mobile",
+    slug: "obryl-app-mobile",
 
-        modules: [
-            {
-                title: "Réservation",
-                description:
-                    "Consultation et réservation des services depuis l'application mobile.",
-            },
+    category: "mobile",
+    categoryLabel: "MOBILE IOS/ANDROID",
+    status: "Client",
 
-            {
-                title: "Géolocalisation",
-                description:
-                    "Localisation des services et fonctionnalités liées aux déplacements.",
-            },
+    shortDescription:
+      "Application mobile native multi-plateforme iOS & Android pour voyageurs et hôtes.",
 
-            {
-                title: "Paiements",
-                description:
-                    "Intégration des mécanismes de paiement de la plateforme.",
-            },
-        ],
+    description:
+      "Application mobile native multi-plateforme iOS & Android",
 
-        technologies: [
-            "Flutter",
-            "Dart",
-            "Laravel",
-        ],
+    presentation:
+      "Application mobile pensée pour permettre aux voyageurs et aux hôtes d'accéder aux fonctionnalités principales de l'écosystème Obryl depuis leurs appareils mobiles.",
 
-        demoUrl: "#",
-        featured: true,
+    architecture: {
+      frontend: [
+        "Flutter",
+        "Dart",
+      ],
+      backend: [
+        "Laravel",
+      ],
     },
+
+    modules: [
+      {
+        title: "Réservation",
+        description:
+          "Consultation et réservation des services depuis l'application mobile.",
+      },
+      {
+        title: "Géolocalisation",
+        description:
+          "Localisation des services et fonctionnalités liées aux déplacements.",
+      },
+      {
+        title: "Paiements",
+        description:
+          "Intégration des mécanismes de paiement de la plateforme.",
+      },
+    ],
+
+    technologies: [
+      "Flutter",
+      "Dart",
+      "Laravel",
+    ],
+
+    demoUrl: "#",
+    featured: true,
+  },
 ];

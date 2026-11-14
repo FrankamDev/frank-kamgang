@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 interface Category {
   id: number;
@@ -231,8 +232,8 @@ export default function Blog() {
           <button
             onClick={() => setActiveCategory("all")}
             className={`whitespace-nowrap text-[13px] transition ${activeCategory === "all"
-                ? "font-semibold text-slate-950 dark:text-white"
-                : "text-slate-400 hover:text-slate-950 dark:hover:text-white"
+              ? "font-semibold text-slate-950 dark:text-white"
+              : "text-slate-400 hover:text-slate-950 dark:hover:text-white"
               }`}
           >
             Tous
@@ -245,8 +246,8 @@ export default function Blog() {
                 setActiveCategory(category.slug)
               }
               className={`whitespace-nowrap text-[13px] transition ${activeCategory === category.slug
-                  ? "font-semibold text-slate-950 dark:text-white"
-                  : "text-slate-400 hover:text-slate-950 dark:hover:text-white"
+                ? "font-semibold text-slate-950 dark:text-white"
+                : "text-slate-400 hover:text-slate-950 dark:hover:text-white"
                 }`}
             >
               {category.name}
@@ -858,7 +859,7 @@ export default function Blog() {
         )}
 
       </AnimatePresence>
-
+      <Footer />
     </main>
   );
 }

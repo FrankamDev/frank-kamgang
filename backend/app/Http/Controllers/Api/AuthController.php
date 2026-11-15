@@ -17,7 +17,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'Email ou mot de passe incorrect.'
+                'message' => 'Email ou mot de passe incorrect.',
             ], 401);
         }
 
@@ -36,7 +36,7 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Déconnexion réussie.'
+            'message' => 'Déconnexion réussie.',
         ]);
     }
 }

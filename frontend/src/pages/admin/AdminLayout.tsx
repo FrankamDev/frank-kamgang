@@ -267,10 +267,9 @@ export default function AdminLayout() {
           dark:border-slate-800
           dark:bg-[#0b1120]
           lg:translate-x-0
-          ${
-            sidebarOpen
-              ? "translate-x-0"
-              : "-translate-x-full"
+          ${sidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full"
           }
         `}
       >
@@ -488,10 +487,9 @@ function NavItem({
         rounded-xl px-3 py-3
         text-sm font-medium
         transition
-        ${
-          active
-            ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-            : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+        ${active
+          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+          : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
         }
       `}
     >

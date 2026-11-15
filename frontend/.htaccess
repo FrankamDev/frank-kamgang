@@ -1,8 +1,18 @@
-<IfModule mod_rewrite.c>
+<!-- <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule ^$ dist/index.html [L]
     RewriteCond %{REQUEST_URI} !^/dist/
     RewriteRule ^(.*)$ dist/$1 [L]
+</IfModule> -->
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Ne pas réécrire les fichiers et dossiers existants
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Envoyer les routes React vers dist/index.html
+    RewriteRule ^ dist/index.html [L]
 </IfModule>
-
-

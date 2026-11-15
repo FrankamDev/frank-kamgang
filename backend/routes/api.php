@@ -45,8 +45,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::put('/admin/projects/{project}', [ProjectController::class, 'update']);
     Route::delete('/admin/projects/{project}', [ProjectController::class, 'destroy']);
 
-    // User
-    Route::get('/user', function (Request $request) {
-        return $request->user();
     });
+    // User
+   Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });

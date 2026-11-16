@@ -1,8 +1,7 @@
-import {  useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
+import api from "../../api/axios";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -20,19 +19,41 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/login",
-        {
-          email,
-          password,
-        }
+      const response = await api.post("/login", {
+        email: email.trim(),
+        password,
+      });
+
+      console.log("LOGIN RESPONSE :", response.data);
+
+      login(
+        response.data.token,
+        response.data.user
       );
 
-      login(response.data.token, response.data.user);
-
       navigate("/admin");
-    } catch (error) {
-      setError("Email ou mot de passe incorrect.");
+    } catch (error: any) {
+      console.error("LOGIN ERROR :", error);
+
+      if (error.response) {
+        console.error("STATUS :", error.response.status);
+        console.error("DATA :", error.response.data);
+
+        if (error.response.status === 401) {
+          setError("Email ou mot de passe incorrect.");
+        } else if (error.response.status === 403) {
+          setError("Accès refusé : ce compte n'est pas administrateur.");
+        } else {
+          setError(
+            error.response.data?.message ||
+              "Une erreur est survenue lors de la connexion."
+          );
+        }
+      } else {
+        setError(
+          "Impossible de contacter le serveur Laravel."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -41,6 +62,7 @@ export default function AdminLogin() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4 dark:bg-[#080d17]">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl dark:bg-slate-900">
+
         <h1 className="mb-2 text-2xl font-bold text-slate-900 dark:text-white">
           Administration
         </h1>
@@ -56,6 +78,7 @@ export default function AdminLogin() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
           <input
             type="email"
             placeholder="Adresse email"
@@ -81,6 +104,7 @@ export default function AdminLogin() {
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
+
         </form>
       </div>
     </div>

@@ -24,66 +24,40 @@ class ProjectController extends Controller
      * Créer un projet.
      */
     public function store(Request $request): JsonResponse
-    {
-        $data = $request->validate([
-            'title' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-
-            'description' => [
-                'required',
-                'string',
-            ],
-
-            'image' => [
-                'nullable',
-                'string',
-            ],
-
-            'category' => [
-                'required',
-                'string',
-                'max:100',
-            ],
-
-            'technologies' => [
-                'nullable',
-                'array',
-            ],
-
-            'technologies.*' => [
-                'string',
-            ],
-
-            'demo_url' => [
-                'nullable',
-                'url',
-            ],
-
-            'github_url' => [
-                'nullable',
-                'url',
-            ],
-
-            'is_featured' => [
-                'sometimes',
-                'boolean',
-            ],
+{
+    try {
+        $project = Project::create([
+            'title' => $request->input('title'),
+            'slug' => $this->generateUniqueSlug(
+                $request->input('title')
+            ),
+            'description' => $request->input('description'),
+            'image' => $request->input('image'),
+            'category' => $request->input('category'),
+            'technologies' => $request->input('technologies', []),
+            'demo_url' => $request->input('demo_url'),
+            'github_url' => $request->input('github_url'),
+            'is_featured' => $request->boolean('is_featured'),
         ]);
-
-        $data['slug'] = $this->generateUniqueSlug(
-            $data['title']
-        );
-
-        $project = Project::create($data);
 
         return response()->json([
             'message' => 'Projet créé avec succès.',
             'project' => $project,
         ], 201);
+
+    } catch (\Throwable $e) {
+
+        \Log::error('PROJECT CREATE ERROR', [
+            'message' => $e->getMessage(),
+            'data' => $request->all(),
+        ]);
+
+        return response()->json([
+            'message' => 'Erreur lors de la création du projet.',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
 
     /**
      * Afficher un projet par son slug.
@@ -99,63 +73,23 @@ class ProjectController extends Controller
      * Modifier un projet.
      */
     public function update(
-        Request $request,
-        Project $project
-    ): JsonResponse {
-        $data = $request->validate([
-            'title' => [
-                'sometimes',
-                'required',
-                'string',
-                'max:255',
-            ],
+    Request $request,
+    Project $project
+): JsonResponse {
+    try {
+        $data = [
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'image' => $request->input('image'),
+            'category' => $request->input('category'),
+            'technologies' => $request->input('technologies', []),
+            'demo_url' => $request->input('demo_url'),
+            'github_url' => $request->input('github_url'),
+            'is_featured' => $request->boolean('is_featured'),
+        ];
 
-            'description' => [
-                'sometimes',
-                'required',
-                'string',
-            ],
-
-            'image' => [
-                'nullable',
-                'string',
-            ],
-
-            'category' => [
-                'sometimes',
-                'required',
-                'string',
-                'max:100',
-            ],
-
-            'technologies' => [
-                'nullable',
-                'array',
-            ],
-
-            'technologies.*' => [
-                'string',
-            ],
-
-            'demo_url' => [
-                'nullable',
-                'url',
-            ],
-
-            'github_url' => [
-                'nullable',
-                'url',
-            ],
-
-            'is_featured' => [
-                'sometimes',
-                'boolean',
-            ],
-        ]);
-
-        // Régénération du slug uniquement si le titre change
+        // Régénérer le slug uniquement si le titre change
         if (
-            isset($data['title']) &&
             $data['title'] !== $project->title
         ) {
             $data['slug'] = $this->generateUniqueSlug(
@@ -170,7 +104,21 @@ class ProjectController extends Controller
             'message' => 'Projet modifié avec succès.',
             'project' => $project->fresh(),
         ]);
+
+    } catch (\Throwable $e) {
+
+        \Log::error('PROJECT UPDATE ERROR', [
+            'project_id' => $project->id,
+            'message' => $e->getMessage(),
+            'data' => $request->all(),
+        ]);
+
+        return response()->json([
+            'message' => 'Erreur lors de la modification du projet.',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
 
     /**
      * Supprimer un projet.
@@ -210,7 +158,7 @@ class ProjectController extends Controller
                 )
                 ->exists()
         ) {
-            $slug = "{$baseSlug}-{$counter}";
+            $slug = $baseSlug . '-' . $counter;
             $counter++;
         }
 

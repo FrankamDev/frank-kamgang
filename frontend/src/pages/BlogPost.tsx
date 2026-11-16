@@ -1,214 +1,492 @@
-import { useState } from "react";
-import { ArrowLeft, Clock, Calendar, Copy, Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  ArrowLeft,
+  Clock,
+  Calendar,
+  Copy,
+  Check,
+} from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../api/axios";
+
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Post {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string;
+  image: string | null;
+  category: Category | null;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/* ==========================================================
+   SKELETON COMPONENTS
+========================================================== */
+
+function Skeleton({
+  className = "",
+}: {
+  className?: string;
+}) {
+  return (
+    <div
+      className={`animate-pulse rounded-md bg-slate-200 dark:bg-slate-800 ${className}`}
+    />
+  );
+}
+
+function BlogPostSkeleton() {
+  return (
+    <main className="min-h-screen bg-white text-slate-950 dark:bg-[#080d17] dark:text-white">
+
+      {/* HEADER */}
+
+      <div className="mx-auto max-w-[1180px] px-5 pt-20 sm:px-8 lg:px-10 lg:pt-32">
+
+        {/* Back */}
+
+        <Skeleton className="h-4 w-28" />
+
+        {/* Article header */}
+
+        <div className="mx-auto mt-10 max-w-[900px]">
+
+          {/* Category */}
+
+          <div className="flex gap-3">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-3 w-3" />
+            <Skeleton className="h-3 w-28" />
+          </div>
+
+          {/* Title */}
+
+          <div className="mt-6 space-y-3">
+
+            <Skeleton className="h-10 w-full sm:h-14" />
+            <Skeleton className="h-10 w-[90%] sm:h-14" />
+
+            <div className="sm:hidden">
+              <Skeleton className="h-10 w-[75%]" />
+            </div>
+
+          </div>
+
+          {/* Excerpt */}
+
+          <div className="mt-7 space-y-3">
+
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-[90%]" />
+            <Skeleton className="h-4 w-[70%]" />
+
+          </div>
+
+          {/* Meta */}
+
+          <div className="mt-7 flex gap-4">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-3 w-28" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+
+        </div>
+
+        {/* COVER */}
+
+        <div className="mt-10 sm:mt-14">
+
+          <Skeleton className="aspect-[16/10] w-full sm:aspect-[16/8]" />
+
+        </div>
+
+      </div>
+
+      {/* CONTENT */}
+
+      <article className="mx-auto max-w-[780px] px-5 py-12 sm:px-8 sm:py-20">
+
+        <div className="space-y-5">
+
+          <Skeleton className="h-5 w-full" />
+          <Skeleton className="h-5 w-[95%]" />
+          <Skeleton className="h-5 w-[85%]" />
+
+          <div className="h-5" />
+
+          <Skeleton className="h-8 w-[65%]" />
+
+          <Skeleton className="h-5 w-full" />
+          <Skeleton className="h-5 w-[92%]" />
+          <Skeleton className="h-5 w-[80%]" />
+
+          <div className="my-8 rounded-lg bg-slate-50 p-6 dark:bg-slate-900">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="mt-4 h-4 w-full" />
+            <Skeleton className="mt-2 h-4 w-[85%]" />
+          </div>
+
+          <Skeleton className="h-8 w-[60%]" />
+
+          <Skeleton className="h-5 w-full" />
+          <Skeleton className="h-5 w-[95%]" />
+          <Skeleton className="h-5 w-[75%]" />
+
+        </div>
+
+      </article>
+
+    </main>
+  );
+}
+
+/* ==========================================================
+   MAIN COMPONENT
+========================================================== */
 
 export default function BlogPost() {
   const navigate = useNavigate();
 
+  const { slug } = useParams<{ slug: string }>();
+
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const [copied, setCopied] = useState(false);
 
-  const article = {
-    category: "Laravel",
-    title:
-      "Construire une API Laravel propre, moderne et évolutive",
-    excerpt:
-      "Les principes essentiels pour concevoir une API Laravel robuste, maintenable et prête à évoluer avec ton application React.",
-    author: "Frank Kamgang",
-    date: "12 novembre 2026",
-    readingTime: "8 min de lecture",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1600&q=85",
+  /* ========================================================
+     FETCH ARTICLE
+  ======================================================== */
+
+  useEffect(() => {
+    if (!slug) {
+      setError("Article introuvable.");
+      setLoading(false);
+      return;
+    }
+
+    const fetchPost = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await api.get<Post>(`/posts/${slug}`);
+
+        setPost(response.data);
+      } catch (err: any) {
+        console.error("Erreur récupération article :", err);
+
+        if (err.response?.status === 404) {
+          setError("Cet article n'existe pas ou a été supprimé.");
+        } else {
+          setError(
+            "Impossible de charger l'article. Vérifie la connexion à l'API."
+          );
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPost();
+  }, [slug]);
+
+  /* ========================================================
+     COPY CODE
+  ======================================================== */
+
+  const copyCode = async () => {
+    const code =
+      "Route::apiResource('posts', PostController::class);";
+
+    try {
+      await navigator.clipboard.writeText(code);
+
+      setCopied(true);
+
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Impossible de copier le code :", error);
+    }
   };
 
-  function copyCode() {
-    navigator.clipboard.writeText(`Route::apiResource('posts', PostController::class);`);
+  /* ========================================================
+     FORMAT DATE
+  ======================================================== */
 
-    setCopied(true);
+  const formatDate = (date: string | null) => {
+    if (!date) return "";
 
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+    return new Intl.DateTimeFormat("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(date));
+  };
+
+  /* ========================================================
+     LOADING
+  ======================================================== */
+
+  if (loading) {
+    return <BlogPostSkeleton />;
   }
 
+  /* ========================================================
+     ERROR
+  ======================================================== */
+
+  if (error || !post) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-white px-5 text-slate-950 dark:bg-[#080d17] dark:text-white">
+
+        <div className="w-full max-w-md text-center">
+
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-900">
+            <ArrowLeft size={20} className="text-slate-500" />
+          </div>
+
+          <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            Article introuvable
+          </p>
+
+          <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            {error || "Cet article n'existe pas."}
+          </h1>
+
+          <button
+            onClick={() => navigate("/blog")}
+            className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-200 px-5 text-sm font-medium transition active:scale-95 dark:border-slate-800"
+          >
+            <ArrowLeft size={15} />
+            Retour au blog
+          </button>
+
+        </div>
+
+      </main>
+    );
+  }
+
+  /* ========================================================
+     ARTICLE
+  ======================================================== */
+
   return (
-    <main className="min-h-screen bg-white text-slate-950 dark:bg-[#080d17] dark:text-white">
+    <main className="min-h-screen overflow-x-hidden bg-white text-slate-950 dark:bg-[#080d17] dark:text-white">
 
-      {/* ==========================================================
-          TOP
-      =========================================================== */}
+      {/* ====================================================
+          HEADER
+      ==================================================== */}
 
-      <div className="mx-auto max-w-[1180px] px-5 pt-24 sm:px-8 lg:px-10 lg:pt-32">
+      <header className="mx-auto max-w-[1180px] px-5 pt-20 sm:px-8 lg:px-10 lg:pt-32">
 
-        {/* Retour */}
+        {/* BACK */}
 
         <button
           onClick={() => navigate("/blog")}
-          className="mb-10 inline-flex items-center gap-2 text-[12px] font-medium text-slate-500 transition hover:text-slate-950 dark:hover:text-white"
+          className="mb-8 inline-flex min-h-10 items-center gap-2 text-[12px] font-medium text-slate-500 transition active:scale-95 hover:text-slate-950 dark:hover:text-white sm:mb-10"
         >
           <ArrowLeft size={15} />
           Retour au blog
         </button>
 
-        {/* ========================================================
-            HEADER ARTICLE
-        ========================================================= */}
+        {/* ARTICLE HEADER */}
 
         <div className="mx-auto max-w-[900px]">
 
-          {/* Catégorie */}
+          {/* CATEGORY */}
 
-          <div className="mb-5 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+          <div className="mb-5 flex flex-wrap items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400 sm:text-[11px] sm:tracking-[0.18em]">
+
             <span className="text-slate-950 dark:text-white">
-              {article.category}
+              {post.category?.name || "Article"}
             </span>
 
             <span>•</span>
 
             <span>Développement web</span>
+
           </div>
 
-          {/* Titre */}
+          {/* TITLE */}
 
-          <h1 className="text-[40px] font-semibold leading-[1.02] tracking-[-0.05em] sm:text-[52px] lg:text-[68px]">
-            {article.title}
+          <h1
+            className="
+              max-w-[850px]
+              text-[36px]
+              font-semibold
+              leading-[1.02]
+              tracking-[-0.045em]
+
+              sm:text-[52px]
+
+              lg:text-[68px]
+            "
+          >
+            {post.title}
           </h1>
 
-          {/* Extrait */}
+          {/* EXCERPT */}
 
-          <p className="mt-7 max-w-[760px] text-[17px] leading-8 text-slate-500 dark:text-slate-400 sm:text-[18px]">
-            {article.excerpt}
-          </p>
+          {post.excerpt && (
+            <p
+              className="
+                mt-6
+                max-w-[760px]
+                text-[16px]
+                leading-7
+                text-slate-500
 
-          {/* Meta */}
+                dark:text-slate-400
 
-          <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-[11px] text-slate-400">
+                sm:mt-7
+                sm:text-[18px]
+                sm:leading-8
+              "
+            >
+              {post.excerpt}
+            </p>
+          )}
+
+          {/* META */}
+
+          <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-3 text-[10px] text-slate-400 sm:mt-8 sm:gap-x-5 sm:text-[11px]">
+
+            {/* AUTHOR */}
 
             <span className="font-medium text-slate-950 dark:text-white">
-              {article.author}
+              Frank Kamgang
             </span>
 
-            <span className="flex items-center gap-1.5">
-              <Calendar size={13} />
-              {article.date}
-            </span>
+            {/* DATE */}
 
-            <span className="flex items-center gap-1.5">
-              <Clock size={13} />
-              {article.readingTime}
-            </span>
+            {post.published_at && (
+              <span className="flex items-center gap-1.5">
+                <Calendar size={13} />
+                {formatDate(post.published_at)}
+              </span>
+            )}
 
           </div>
 
         </div>
 
-        {/* ========================================================
+        {/* ==================================================
             COVER IMAGE
-        ========================================================= */}
+        ================================================== */}
 
-        <div className="mt-12 overflow-hidden sm:mt-16">
-          <img
-            src={article.image}
-            alt={article.title}
-            className="h-auto w-full object-cover"
-          />
-        </div>
+        {post.image && (
+          <div className="mt-9 overflow-hidden rounded-2xl sm:mt-14 sm:rounded-none">
 
-      </div>
+            <img
+              src={post.image}
+              alt={post.title}
+              loading="eager"
+              className="
+                aspect-[16/10]
+                w-full
+                object-cover
 
-      {/* ==========================================================
+                sm:aspect-[16/8]
+              "
+            />
+
+          </div>
+        )}
+
+      </header>
+
+      {/* ====================================================
           ARTICLE CONTENT
-      =========================================================== */}
+      ==================================================== */}
 
-      <article className="mx-auto max-w-[780px] px-5 py-14 sm:px-8 sm:py-20">
+      <article
+        className="
+          mx-auto
+          max-w-[780px]
+          px-5
+          py-12
 
-        {/* Introduction */}
+          sm:px-8
+          sm:py-20
+        "
+      >
 
-        <p className="text-[18px] leading-[1.9] text-slate-700 dark:text-slate-300">
-          Construire une API ne consiste pas simplement à créer quelques
-          routes et à retourner du JSON. Lorsque ton application commence
-          à grandir, la structure du backend devient rapidement déterminante
-          pour la maintenance et l'évolution du projet.
-        </p>
+        {/* CONTENT */}
 
-        <p className="mt-7 text-[17px] leading-[1.9] text-slate-600 dark:text-slate-400">
-          Dans cet article, nous allons voir comment organiser une API
-          Laravel moderne afin qu'elle puisse communiquer efficacement avec
-          une application React, tout en gardant une architecture claire.
-        </p>
+        <div
+          className="
+            prose
+            prose-slate
+            max-w-none
+            dark:prose-invert
 
-        {/* ========================================================
-            SOMMAIRE
-        ========================================================= */}
+            prose-headings:font-semibold
+            prose-headings:tracking-[-0.035em]
 
-        <div className="my-12 border-y border-slate-200 py-7 dark:border-slate-800">
+            prose-h2:mt-12
+            prose-h2:text-[28px]
+            prose-h2:leading-tight
 
-          <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-            Dans cet article
-          </p>
+            prose-h3:mt-9
+            prose-h3:text-[21px]
 
-          <ol className="space-y-2 text-[14px]">
-            <li>01 — Structurer son API Laravel</li>
-            <li>02 — Créer les ressources</li>
-            <li>03 — Connecter React à Laravel</li>
-            <li>04 — Organiser son code</li>
-            <li>05 — Préparer l'évolution du projet</li>
-          </ol>
+            prose-p:text-[17px]
+            prose-p:leading-[1.9]
 
-        </div>
+            prose-p:text-slate-600
+            dark:prose-p:text-slate-400
 
-        {/* ========================================================
-            H2
-        ========================================================= */}
+            prose-strong:text-slate-950
+            dark:prose-strong:text-white
 
-        <h2 className="mt-14 text-[30px] font-semibold leading-tight tracking-[-0.035em] sm:text-[36px]">
-          01. Structurer son API Laravel
-        </h2>
+            prose-a:text-slate-950
+            dark:prose-a:text-white
 
-        <p className="mt-6 text-[17px] leading-[1.9] text-slate-600 dark:text-slate-400">
-          Une bonne API commence par une structure claire. Laravel fournit
-          déjà plusieurs outils permettant de séparer les responsabilités
-          entre les routes, les contrôleurs, les modèles et les ressources.
-        </p>
+            prose-li:text-slate-600
+            dark:prose-li:text-slate-400
 
-        <p className="mt-6 text-[17px] leading-[1.9] text-slate-600 dark:text-slate-400">
-          L'objectif est simple : chaque partie de l'application doit avoir
-          une responsabilité précise.
-        </p>
+            prose-blockquote:border-slate-900
+            dark:prose-blockquote:border-white
 
-        {/* ========================================================
-            NOTE
-        ========================================================= */}
+            prose-code:text-slate-950
+            dark:prose-code:text-white
 
-        <div className="my-10 border-l-2 border-slate-900 bg-slate-50 px-6 py-5 dark:border-white dark:bg-slate-900/50">
+            prose-pre:overflow-x-auto
+            prose-pre:bg-[#0b1220]
 
-          <p className="text-[14px] font-semibold">
-            À retenir
-          </p>
+            sm:prose-h2:text-[36px]
+            sm:prose-h3:text-[23px]
+          "
+          dangerouslySetInnerHTML={{
+            __html: post.content,
+          }}
+        />
 
-          <p className="mt-2 text-[14px] leading-7 text-slate-500 dark:text-slate-400">
-            Une architecture simple au départ devient beaucoup plus facile
-            à faire évoluer lorsqu'elle respecte déjà des responsabilités
-            bien séparées.
-          </p>
+        {/* ==================================================
+            CODE BLOCK
+        ================================================== */}
 
-        </div>
+        <div className="my-10 overflow-hidden rounded-xl bg-[#0b1220] shadow-sm sm:rounded-none">
 
-        {/* ========================================================
-            CODE
-        ========================================================= */}
+          {/* CODE HEADER */}
 
-        <h2 className="mt-14 text-[30px] font-semibold leading-tight tracking-[-0.035em] sm:text-[36px]">
-          02. Créer les ressources API
-        </h2>
-
-        <p className="mt-6 text-[17px] leading-[1.9] text-slate-600 dark:text-slate-400">
-          Laravel permet de générer rapidement les routes CRUD nécessaires
-          à une ressource.
-        </p>
-
-        <div className="relative my-8 overflow-hidden bg-[#0b1220]">
-
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+          <div className="flex min-h-12 items-center justify-between border-b border-white/10 px-4">
 
             <span className="text-[10px] uppercase tracking-wider text-slate-500">
               routes/api.php
@@ -216,7 +494,7 @@ export default function BlogPost() {
 
             <button
               onClick={copyCode}
-              className="flex items-center gap-2 text-[11px] text-slate-400 hover:text-white"
+              className="flex min-h-10 items-center gap-2 text-[11px] text-slate-400 transition active:scale-95 hover:text-white"
             >
               {copied ? (
                 <>
@@ -233,187 +511,66 @@ export default function BlogPost() {
 
           </div>
 
-          <pre className="overflow-x-auto p-5 text-[13px] leading-7 text-slate-300">
-            <code>
-              {`Route::apiResource('posts', PostController::class);`}
-            </code>
-          </pre>
+          {/* CODE */}
+
+          <div className="overflow-x-auto">
+
+            <pre className="min-w-max p-5 text-[12px] leading-7 text-slate-300 sm:text-[13px]">
+
+              <code>
+                {"Route::apiResource('posts', PostController::class);"}
+              </code>
+
+            </pre>
+
+          </div>
 
         </div>
 
-        {/* ========================================================
-            H3
-        ========================================================= */}
-
-        <h3 className="mt-10 text-[23px] font-semibold">
-          Pourquoi utiliser apiResource ?
-        </h3>
-
-        <p className="mt-5 text-[17px] leading-[1.9] text-slate-600 dark:text-slate-400">
-          Cette approche permet de générer rapidement les routes standards
-          d'une ressource tout en gardant une convention cohérente dans
-          l'application.
-        </p>
-
-        {/* ========================================================
-            LIST
-        ========================================================= */}
-
-        <ul className="my-8 space-y-4 text-[16px] leading-7 text-slate-600 dark:text-slate-400">
-
-          <li>
-            <strong className="text-slate-950 dark:text-white">
-              GET
-            </strong>{" "}
-            — récupérer les articles
-          </li>
-
-          <li>
-            <strong className="text-slate-950 dark:text-white">
-              POST
-            </strong>{" "}
-            — créer un article
-          </li>
-
-          <li>
-            <strong className="text-slate-950 dark:text-white">
-              PUT
-            </strong>{" "}
-            — modifier un article
-          </li>
-
-          <li>
-            <strong className="text-slate-950 dark:text-white">
-              DELETE
-            </strong>{" "}
-            — supprimer un article
-          </li>
-
-        </ul>
-
-        {/* ========================================================
-            TABLE
-        ========================================================= */}
-
-        <h2 className="mt-14 text-[30px] font-semibold leading-tight tracking-[-0.035em] sm:text-[36px]">
-          03. Comparaison des responsabilités
-        </h2>
-
-        <div className="my-8 overflow-x-auto border border-slate-200 dark:border-slate-800">
-
-          <table className="w-full min-w-[620px] border-collapse text-left text-[13px]">
-
-            <thead>
-              <tr className="border-b border-slate-200 dark:border-slate-800">
-                <th className="px-4 py-4 font-semibold">
-                  Élément
-                </th>
-
-                <th className="px-4 py-4 font-semibold">
-                  Responsabilité
-                </th>
-
-                <th className="px-4 py-4 font-semibold">
-                  Exemple
-                </th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr className="border-b border-slate-200 dark:border-slate-800">
-                <td className="px-4 py-4">
-                  Route
-                </td>
-
-                <td className="px-4 py-4 text-slate-500">
-                  Définir l'URL
-                </td>
-
-                <td className="px-4 py-4 text-slate-500">
-                  /api/posts
-                </td>
-              </tr>
-
-              <tr className="border-b border-slate-200 dark:border-slate-800">
-                <td className="px-4 py-4">
-                  Controller
-                </td>
-
-                <td className="px-4 py-4 text-slate-500">
-                  Gérer la requête
-                </td>
-
-                <td className="px-4 py-4 text-slate-500">
-                  PostController
-                </td>
-              </tr>
-
-              <tr>
-                <td className="px-4 py-4">
-                  Model
-                </td>
-
-                <td className="px-4 py-4 text-slate-500">
-                  Gérer les données
-                </td>
-
-                <td className="px-4 py-4 text-slate-500">
-                  Post
-                </td>
-              </tr>
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-        {/* ========================================================
+        {/* ==================================================
             CONCLUSION
-        ========================================================= */}
+        ================================================== */}
 
-        <h2 className="mt-14 text-[30px] font-semibold leading-tight tracking-[-0.035em] sm:text-[36px]">
-          Conclusion
-        </h2>
+        <div className="my-10 border-y border-slate-200 py-7 dark:border-slate-800 sm:my-12 sm:py-8">
 
-        <p className="mt-6 text-[17px] leading-[1.9] text-slate-600 dark:text-slate-400">
-          Une API bien structurée permet de faire évoluer plus facilement
-          une application. En séparant clairement les responsabilités,
-          tu réduis la complexité et tu facilites le travail entre le
-          frontend et le backend.
-        </p>
-
-        <div className="my-12 border-y border-slate-200 py-8 dark:border-slate-800">
-
-          <p className="text-[13px] font-semibold">
+          <p className="text-[12px] font-semibold">
             Ce qu'il faut retenir
           </p>
 
-          <p className="mt-3 text-[15px] leading-7 text-slate-500 dark:text-slate-400">
-            Commence simple, structure correctement ton projet et prépare
-            ton architecture pour les fonctionnalités qui viendront ensuite.
+          <p className="mt-3 text-[14px] leading-7 text-slate-500 dark:text-slate-400 sm:text-[15px]">
+            Un contenu bien structuré permet de faire évoluer facilement
+            ton application et de garder une séparation claire entre
+            le frontend et le backend.
           </p>
 
         </div>
 
       </article>
 
-      {/* ==========================================================
-          FOOTER ARTICLE
-      =========================================================== */}
+      {/* ====================================================
+          FOOTER
+      ==================================================== */}
 
-      <div className="mx-auto max-w-[780px] border-t border-slate-200 px-5 py-12 dark:border-slate-800 sm:px-8">
+      <footer className="mx-auto max-w-[780px] border-t border-slate-200 px-5 py-10 dark:border-slate-800 sm:px-8 sm:py-12">
 
         <button
           onClick={() => navigate("/blog")}
-          className="inline-flex items-center gap-2 text-[13px] font-semibold"
+          className="
+            inline-flex
+            min-h-11
+            items-center
+            gap-2
+            text-[13px]
+            font-semibold
+            transition
+            active:scale-95
+          "
         >
           <ArrowLeft size={15} />
           Voir tous les articles
         </button>
 
-      </div>
+      </footer>
 
     </main>
   );

@@ -1,394 +1,646 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
-  ArrowLeft,
-  Clock,
-  Calendar,
-  Copy,
-  Check,
+  Plus,
+  Pencil,
+  Trash2,
+  X,
   Loader2,
+  ExternalLink,
+
+  Star,
 } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/axios";
 
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-interface Post {
+interface Project {
   id: number;
   title: string;
   slug: string;
-  excerpt: string | null;
-  content: string;
+  description: string;
   image: string | null;
-  category: Category | null;
-  author: string | null;
-  reading_time: number | null;
-  published_at: string | null;
-  created_at: string;
+  category: string | null;
+  technologies: string[];
+  demo_url: string | null;
+  github_url: string | null;
+  is_featured: boolean;
 }
 
-export default function BlogPost() {
-  const navigate = useNavigate();
-  const { slug } = useParams<{ slug: string }>();
+interface ProjectForm {
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  technologies: string;
+  demo_url: string;
+  github_url: string;
+  is_featured: boolean;
+}
 
-  const [post, setPost] = useState<Post | null>(null);
+const emptyForm: ProjectForm = {
+  title: "",
+  description: "",
+  image: "",
+  category: "",
+  technologies: "",
+  demo_url: "",
+  github_url: "",
+  is_featured: false,
+};
+
+export default function ProjectsManager() {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<number | null>(null);
 
-  const [copied, setCopied] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
 
-  // ==========================================================
-  // FETCH ARTICLE
-  // ==========================================================
+  const [form, setForm] = useState<ProjectForm>(emptyForm);
+
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+
+      const response = await api.get<Project[]>("/projects");
+
+      setProjects(response.data);
+    } catch (error: any) {
+      console.error("Erreur récupération projets :", error);
+
+      alert(
+        error.response?.data?.message ||
+        "Impossible de récupérer les projets."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!slug) {
-      setError("Article introuvable.");
-      setLoading(false);
+    fetchProjects();
+  }, []);
+
+  const openCreateModal = () => {
+    setEditingProject(null);
+    setForm(emptyForm);
+    setShowModal(true);
+  };
+
+  const openEditModal = (project: Project) => {
+    setEditingProject(project);
+
+    setForm({
+      title: project.title || "",
+      description: project.description || "",
+      image: project.image || "",
+      category: project.category || "",
+      technologies: Array.isArray(project.technologies)
+        ? project.technologies.join(", ")
+        : "",
+      demo_url: project.demo_url || "",
+      github_url: project.github_url || "",
+      is_featured: Boolean(project.is_featured),
+    });
+
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    if (saving) return;
+
+    setShowModal(false);
+    setEditingProject(null);
+    setForm(emptyForm);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value, type } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]:
+        type === "checkbox"
+          ? (e.target as HTMLInputElement).checked
+          : value,
+    }));
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!form.title.trim()) {
+      alert("Le titre du projet est obligatoire.");
       return;
     }
 
-    const fetchPost = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const response = await api.get<Post>(`/posts/${slug}`);
-
-        setPost(response.data);
-      } catch (err: any) {
-        console.error("Erreur récupération article :", err);
-
-        if (err.response?.status === 404) {
-          setError("Cet article n'existe pas ou a été supprimé.");
-        } else {
-          setError(
-            "Impossible de charger l'article. Vérifie la connexion à l'API."
-          );
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPost();
-  }, [slug]);
-
-  // ==========================================================
-  // COPY CODE
-  // ==========================================================
-
-  const copyCode = async () => {
-    const code = `Route::apiResource('posts', PostController::class);`;
+    if (!form.description.trim()) {
+      alert("La description du projet est obligatoire.");
+      return;
+    }
 
     try {
-      await navigator.clipboard.writeText(code);
+      setSaving(true);
 
-      setCopied(true);
+      const payload = {
+        title: form.title.trim(),
+        description: form.description.trim(),
+        image: form.image.trim() || null,
+        category: form.category.trim() || null,
+        technologies: form.technologies
+          .split(",")
+          .map((tech) => tech.trim())
+          .filter(Boolean),
+        demo_url: form.demo_url.trim() || null,
+        github_url: form.github_url.trim() || null,
+        is_featured: form.is_featured,
+      };
 
-      setTimeout(() => {
-        setCopied(false);
-      }, 2000);
-    } catch (error) {
-      console.error("Impossible de copier le code :", error);
+      if (editingProject) {
+        await api.put(
+          `/admin/projects/${editingProject.id}`,
+          payload
+        );
+
+        alert("Projet modifié avec succès.");
+      } else {
+        await api.post("/admin/projects", payload);
+
+        alert("Projet créé avec succès.");
+      }
+
+      closeModal();
+      await fetchProjects();
+    } catch (error: any) {
+      console.error("Erreur sauvegarde projet :", error);
+
+      console.error("Status :", error.response?.status);
+      console.error("Response :", error.response?.data);
+
+      if (error.response?.status === 401) {
+        alert("Session administrateur expirée. Reconnecte-toi.");
+      } else if (error.response?.status === 403) {
+        alert("Tu n'as pas les droits administrateur.");
+      } else if (error.response?.status === 422) {
+        alert(
+          error.response?.data?.message ||
+          "Les données envoyées sont invalides."
+        );
+      } else {
+        alert(
+          error.response?.data?.message ||
+          "Impossible d'enregistrer le projet."
+        );
+      }
+    } finally {
+      setSaving(false);
     }
   };
 
-  // ==========================================================
-  // FORMAT DATE
-  // ==========================================================
+  const handleDelete = async (id: number) => {
+    const confirmed = window.confirm(
+      "Voulez-vous vraiment supprimer ce projet ?"
+    );
 
-  const formatDate = (date: string | null) => {
-    if (!date) return "";
+    if (!confirmed) return;
 
-    return new Intl.DateTimeFormat("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }).format(new Date(date));
+    try {
+      setDeleting(id);
+
+      await api.delete(`/admin/projects/${id}`);
+
+      setProjects((prev) => prev.filter((project) => project.id !== id));
+
+      alert("Projet supprimé avec succès.");
+    } catch (error: any) {
+      console.error("Erreur suppression projet :", error);
+
+      alert(
+        error.response?.data?.message ||
+        "Impossible de supprimer le projet."
+      );
+    } finally {
+      setDeleting(null);
+    }
   };
 
-  // ==========================================================
-  // LOADING
-  // ==========================================================
+  return (
+    <div className="space-y-6">
 
-  if (loading) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-white text-slate-950 dark:bg-[#080d17] dark:text-white">
-        <div className="flex items-center gap-3 text-sm text-slate-500">
-          <Loader2 size={18} className="animate-spin" />
-          Chargement de l'article...
-        </div>
-      </main>
-    );
-  }
+      {/* HEADER */}
 
-  // ==========================================================
-  // ERROR / 404
-  // ==========================================================
-
-  if (error || !post) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-white px-5 text-slate-950 dark:bg-[#080d17] dark:text-white">
-        <div className="max-w-md text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-            Article introuvable
-          </p>
-
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight">
-            {error || "Cet article n'existe pas."}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Projets
           </h1>
+
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Gérez les projets affichés sur votre portfolio.
+          </p>
+        </div>
+
+        <button
+          onClick={openCreateModal}
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+        >
+          <Plus size={17} />
+          Nouveau projet
+        </button>
+      </div>
+
+      {/* LOADING */}
+
+      {loading ? (
+        <div className="flex min-h-[300px] items-center justify-center">
+          <div className="flex items-center gap-3 text-sm text-slate-500">
+            <Loader2 size={20} className="animate-spin" />
+            Chargement des projets...
+          </div>
+        </div>
+      ) : projects.length === 0 ? (
+        /* EMPTY */
+
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-slate-700 dark:bg-slate-900">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+            Aucun projet
+          </h2>
+
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            Commencez par créer votre premier projet.
+          </p>
 
           <button
-            onClick={() => navigate("/blog")}
-            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold transition hover:opacity-60"
+            onClick={openCreateModal}
+            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-slate-900"
           >
-            <ArrowLeft size={15} />
-            Retour au blog
+            <Plus size={17} />
+            Créer un projet
           </button>
         </div>
-      </main>
-    );
-  }
+      ) : (
+        /* PROJECTS */
 
-  // ==========================================================
-  // ARTICLE
-  // ==========================================================
-
-  return (
-    <main className="min-h-screen bg-white text-slate-950 dark:bg-[#080d17] dark:text-white">
-
-      {/* ======================================================
-          TOP
-      ====================================================== */}
-
-      <div className="mx-auto max-w-[1180px] px-5 pt-24 sm:px-8 lg:px-10 lg:pt-32">
-
-        {/* Retour */}
-
-        <button
-          onClick={() => navigate("/blog")}
-          className="mb-10 inline-flex items-center gap-2 text-[12px] font-medium text-slate-500 transition hover:text-slate-950 dark:hover:text-white"
-        >
-          <ArrowLeft size={15} />
-          Retour au blog
-        </button>
-
-        {/* ====================================================
-            HEADER ARTICLE
-        ==================================================== */}
-
-        <div className="mx-auto max-w-[900px]">
-
-          {/* Catégorie */}
-
-          <div className="mb-5 flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-  <span className="text-slate-950 dark:text-white">
-    {post.category?.name || "Article"}
-  </span>
-
-  <span>•</span>
-
-  <span>Développement web</span>
-</div>
-
-          {/* Titre */}
-
-          <h1 className="text-[40px] font-semibold leading-[1.02] tracking-[-0.05em] sm:text-[52px] lg:text-[68px]">
-            {post.title}
-          </h1>
-
-          {/* Extrait */}
-
-          {post.excerpt && (
-            <p className="mt-7 max-w-[760px] text-[17px] leading-8 text-slate-500 dark:text-slate-400 sm:text-[18px]">
-              {post.excerpt}
-            </p>
-          )}
-
-          {/* Meta */}
-
-          <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-[11px] text-slate-400">
-
-            {post.author && (
-              <span className="font-medium text-slate-950 dark:text-white">
-                {post.author}
-              </span>
-            )}
-
-            {post.published_at && (
-              <span className="flex items-center gap-1.5">
-                <Calendar size={13} />
-                {formatDate(post.published_at)}
-              </span>
-            )}
-
-            {post.reading_time && (
-              <span className="flex items-center gap-1.5">
-                <Clock size={13} />
-                {post.reading_time} min de lecture
-              </span>
-            )}
-
-          </div>
-
-        </div>
-
-        {/* ====================================================
-            COVER IMAGE
-        ==================================================== */}
-
-        {post.image && (
-          <div className="mt-12 overflow-hidden sm:mt-16">
-
-            <img
-              src={post.image}
-              alt={post.title}
-              className="h-auto w-full object-cover"
-            />
-
-          </div>
-        )}
-
-      </div>
-
-      {/* ======================================================
-          ARTICLE CONTENT
-      ====================================================== */}
-
-      <article className="mx-auto max-w-[780px] px-5 py-14 sm:px-8 sm:py-20">
-
-        {/* ====================================================
-            CONTENU DYNAMIQUE
-        ==================================================== */}
-
-        <div
-          className="
-            prose
-            prose-slate
-            max-w-none
-
-            dark:prose-invert
-
-            prose-headings:font-semibold
-            prose-headings:tracking-[-0.035em]
-
-            prose-h2:mt-14
-            prose-h2:text-[30px]
-            prose-h2:leading-tight
-
-            sm:prose-h2:text-[36px]
-
-            prose-h3:mt-10
-            prose-h3:text-[23px]
-
-            prose-p:text-[17px]
-            prose-p:leading-[1.9]
-
-            prose-p:text-slate-600
-            dark:prose-p:text-slate-400
-
-            prose-strong:text-slate-950
-            dark:prose-strong:text-white
-
-            prose-a:text-slate-950
-            dark:prose-a:text-white
-
-            prose-li:text-slate-600
-            dark:prose-li:text-slate-400
-
-            prose-blockquote:border-slate-900
-            dark:prose-blockquote:border-white
-
-            prose-code:text-slate-950
-            dark:prose-code:text-white
-
-            prose-pre:bg-[#0b1220]
-          "
-          dangerouslySetInnerHTML={{
-            __html: post.content,
-          }}
-        />
-
-        {/* ====================================================
-            BLOC CODE EXEMPLE
-            À garder si tu veux conserver ton bouton Copier
-        ==================================================== */}
-
-        <div className="relative my-10 overflow-hidden bg-[#0b1220]">
-
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-
-            <span className="text-[10px] uppercase tracking-wider text-slate-500">
-              routes/api.php
-            </span>
-
-            <button
-              onClick={copyCode}
-              className="flex items-center gap-2 text-[11px] text-slate-400 transition hover:text-white"
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {projects.map((project) => (
+            <div
+              key={project.id}
+              className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
             >
-              {copied ? (
-                <>
-                  <Check size={14} />
-                  Copié
-                </>
-              ) : (
-                <>
-                  <Copy size={14} />
-                  Copier
-                </>
-              )}
-            </button>
+              {/* IMAGE */}
 
+              <div className="relative aspect-video bg-slate-100 dark:bg-slate-800">
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center text-sm text-slate-400">
+                    Aucune image
+                  </div>
+                )}
+
+                {project.is_featured && (
+                  <div className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-slate-900 backdrop-blur">
+                    <Star size={12} />
+                    Featured
+                  </div>
+                )}
+              </div>
+
+              {/* CONTENT */}
+
+              <div className="p-5">
+
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-semibold text-slate-900 dark:text-white">
+                      {project.title}
+                    </h3>
+
+                    {project.category && (
+                      <p className="mt-1 text-xs text-slate-400">
+                        {project.category}
+                      </p>
+                    )}
+                  </div>
+
+                  <span className="rounded-lg bg-slate-100 px-2 py-1 text-[10px] text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                    #{project.id}
+                  </span>
+                </div>
+
+                <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
+                  {project.description}
+                </p>
+
+                {/* TECHNOLOGIES */}
+
+                {project.technologies?.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {project.technologies.map((technology) => (
+                      <span
+                        key={technology}
+                        className="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                      >
+                        {technology}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* LINKS */}
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {project.demo_url && (
+                    <a
+                      href={project.demo_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                    >
+                      <ExternalLink size={13} />
+                      Demo
+                    </a>
+                  )}
+
+                  {/* {project.github_url && (
+                    <a
+                      href={project.github_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                    >
+                      <Github size={13} />
+                      GitHub
+                    </a>
+                  )} */}
+                </div>
+
+                {/* ACTIONS */}
+
+                <div className="mt-5 flex items-center gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
+                  <button
+                    onClick={() => openEditModal(project)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                  >
+                    <Pencil size={13} />
+                    Modifier
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(project.id)}
+                    disabled={deleting === project.id}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-xs font-medium text-red-600 transition hover:bg-red-50 disabled:opacity-50 dark:border-red-900/50 dark:hover:bg-red-950/30"
+                  >
+                    {deleting === project.id ? (
+                      <Loader2 size={13} className="animate-spin" />
+                    ) : (
+                      <Trash2 size={13} />
+                    )}
+
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* MODAL */}
+
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl dark:bg-slate-900">
+
+            {/* MODAL HEADER */}
+
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-900">
+              <div>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                  {editingProject
+                    ? "Modifier le projet"
+                    : "Nouveau projet"}
+                </h2>
+
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  {editingProject
+                    ? "Modifiez les informations du projet."
+                    : "Ajoutez un projet à votre portfolio."}
+                </p>
+              </div>
+
+              <button
+                onClick={closeModal}
+                disabled={saving}
+                className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-white"
+              >
+                <X size={19} />
+              </button>
+            </div>
+
+            {/* FORM */}
+
+            <form onSubmit={handleSubmit} className="space-y-5 p-6">
+
+              {/* TITLE */}
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Titre
+                </label>
+
+                <input
+                  type="text"
+                  name="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  placeholder="Ex: Plateforme e-learning"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-white"
+                  required
+                />
+              </div>
+
+              {/* DESCRIPTION */}
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Description
+                </label>
+
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  rows={5}
+                  placeholder="Décrivez brièvement le projet..."
+                  className="w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-white"
+                  required
+                />
+              </div>
+
+              {/* IMAGE */}
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  URL de l'image
+                </label>
+
+                <input
+                  type="url"
+                  name="image"
+                  value={form.image}
+                  onChange={handleChange}
+                  placeholder="https://..."
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-white"
+                />
+              </div>
+
+              {/* CATEGORY */}
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Catégorie
+                </label>
+
+                <input
+                  type="text"
+                  name="category"
+                  value={form.category}
+                  onChange={handleChange}
+                  placeholder="Ex: Web Application"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-white"
+                />
+              </div>
+
+              {/* TECHNOLOGIES */}
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Technologies
+                </label>
+
+                <input
+                  type="text"
+                  name="technologies"
+                  value={form.technologies}
+                  onChange={handleChange}
+                  placeholder="React, TypeScript, Laravel, MySQL"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-white"
+                />
+
+                <p className="mt-1.5 text-[11px] text-slate-400">
+                  Séparez les technologies par des virgules.
+                </p>
+              </div>
+
+              {/* URLS */}
+
+              <div className="grid gap-5 md:grid-cols-2">
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                    URL Demo
+                  </label>
+
+                  <input
+                    type="url"
+                    name="demo_url"
+                    value={form.demo_url}
+                    onChange={handleChange}
+                    placeholder="https://..."
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                    URL GitHub
+                  </label>
+
+                  <input
+                    type="url"
+                    name="github_url"
+                    value={form.github_url}
+                    onChange={handleChange}
+                    placeholder="https://github.com/..."
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-white"
+                  />
+                </div>
+
+              </div>
+
+              {/* FEATURED */}
+
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 p-4 dark:border-slate-700">
+                <input
+                  type="checkbox"
+                  name="is_featured"
+                  checked={form.is_featured}
+                  onChange={handleChange}
+                  className="h-4 w-4"
+                />
+
+                <div>
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                    Projet mis en avant
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-400">
+                    Afficher ce projet comme projet principal.
+                  </p>
+                </div>
+              </label>
+
+              {/* BUTTONS */}
+
+              <div className="flex justify-end gap-3 border-t border-slate-200 pt-5 dark:border-slate-800">
+
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  disabled={saving}
+                  className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                >
+                  Annuler
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      Enregistrement...
+                    </>
+                  ) : (
+                    <>
+                      {editingProject ? (
+                        <Pencil size={16} />
+                      ) : (
+                        <Plus size={16} />
+                      )}
+
+                      {editingProject
+                        ? "Enregistrer"
+                        : "Créer le projet"}
+                    </>
+                  )}
+                </button>
+
+              </div>
+            </form>
           </div>
-
-          <pre className="overflow-x-auto p-5 text-[13px] leading-7 text-slate-300">
-            <code>
-              {"Route::apiResource('posts', PostController::class);"}
-            </code>
-          </pre>
-
         </div>
-
-        {/* ====================================================
-            CONCLUSION
-        ==================================================== */}
-
-        <div className="my-12 border-y border-slate-200 py-8 dark:border-slate-800">
-
-          <p className="text-[13px] font-semibold">
-            Ce qu'il faut retenir
-          </p>
-
-          <p className="mt-3 text-[15px] leading-7 text-slate-500 dark:text-slate-400">
-            Un contenu bien structuré permet de faire évoluer facilement
-            ton application et de garder une séparation claire entre
-            le frontend et le backend.
-          </p>
-
-        </div>
-
-      </article>
-
-      {/* ======================================================
-          FOOTER ARTICLE
-      ====================================================== */}
-
-      <div className="mx-auto max-w-[780px] border-t border-slate-200 px-5 py-12 dark:border-slate-800 sm:px-8">
-
-        <button
-          onClick={() => navigate("/blog")}
-          className="inline-flex items-center gap-2 text-[13px] font-semibold"
-        >
-          <ArrowLeft size={15} />
-          Voir tous les articles
-        </button>
-
-      </div>
-
-    </main>
+      )}
+    </div>
   );
 }

@@ -13,7 +13,13 @@ body {
   background: #ffffff;
   color: #0f172a;
 }
-
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 .dark body {
   background: #080d17;
   color: #f8fafc;
